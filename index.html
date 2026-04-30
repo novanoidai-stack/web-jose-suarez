@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<style data-omelette-injected>html,body{background:transparent}</style><script data-omelette-injected>(()=>{var $=["https://claude.ai","https://preview.claude.ai","https://eap-omelette.claude.ai"];var F=30000;var A=3000;document.addEventListener("DOMContentLoaded",()=>{const Q="transform-react-jsx-source";document.querySelectorAll('script[type="text/babel"],script[type="text/jsx"]').forEach((J,V)=>{const X=J.getAttribute("data-plugins")||"";if(X.indexOf(Q)<0){J.setAttribute("data-plugins",X?`${X},${Q}`:Q)}if(!J.hasAttribute("data-filename")){J.setAttribute("data-filename",J.getAttribute("src")||`inline-${V}`)}})});var W=window.parent;if(W&&W!==window){const Q=(z,k)=>{try{W.postMessage({__omelette_log:true,type:z,data:k},"*")}catch{}};["log","warn","error"].forEach((z)=>{const k=console[z];console[z]=(...C)=>{const D=C.map((w)=>{try{return typeof w==="object"?JSON.stringify(w):String(w)}catch{try{return String(w)}catch{return"[unstringifiable]"}}}).join(" ");Q(z,D);k.apply(console,C)}});window.addEventListener("error",(z)=>{const k=z.target;if(k&&k!==window&&k.tagName){const C=k.src||k.href||"";Q("resource_error",`${k.tagName} failed to load: ${C}`)}else{Q("error",`${z.message||"Unknown error"} at ${z.filename||"?"}:${z.lineno||0}:${z.colno||0}`)}},true);window.addEventListener("unhandledrejection",(z)=>{const k=z.reason;const C=k instanceof Error?`${k.message} ${k.stack}`:String(k);Q("error",`Unhandled rejection: ${C}`)});const J=()=>{try{W.postMessage({type:"omelette:height",height:document.documentElement.scrollHeight},"*")}catch{}};if(document.readyState==="complete")J();else window.addEventListener("load",J);if(window.ResizeObserver)new ResizeObserver(J).observe(document.documentElement);const V={};let X=0;window.claude={complete(z){return new Promise((k,C)=>{if(!$.length){C(new Error("claude.complete: no parent origin"));return}const D=`c${++X}`;const w=()=>setTimeout(()=>{delete V[D];C(new Error(`claude.complete: no data for ${F/1000}s`))},F);const K=w();V[D]={resolve:k,reject:C,text:"",t:K,arm:w};try{for(const Z of $){W.postMessage({__om_api:true,id:D,body:z},Z)}}catch(Z){clearTimeout(K);delete V[D];C(Z)}})}};const Y={};let h=0;window.omelette={writeFile:(z,k)=>new Promise((C,D)=>{if(!$.length){C();return}const w=`f${++h}`;const K=setTimeout(()=>{delete Y[w];C()},A);Y[w]={resolve:C,reject:D,t:K};try{for(const Z of $){W.postMessage({__om_file:true,id:w,op:"write",path:z,content:k},Z)}}catch{clearTimeout(K);delete Y[w];C()}})};const b=(z)=>{try{return JSON.stringify(z)}catch{return JSON.stringify(String(z))}};window.addEventListener("message",(z)=>{if($.indexOf(z.origin)<0)return;if(z.source!==W)return;const k=z.data;if(!k)return;if(k.__om_file_r){const w=Y[k.id];if(!w)return;clearTimeout(w.t);delete Y[k.id];if(k.ok)w.resolve();else w.reject(new Error(k.error||"write failed"));return}if(k.__om_api_r){const w=V[k.id];if(!w)return;if(k.error!=null){clearTimeout(w.t);delete V[k.id];w.reject(new Error(k.error));return}if(k.chunk!=null){clearTimeout(w.t);w.t=w.arm();w.text+=k.chunk;return}if(k.done){clearTimeout(w.t);delete V[k.id];w.resolve(k.text!=null?k.text:w.text);return}return}if(!k.__om_eval)return;const C=k;const D=(w)=>{z.source.postMessage({...w,__om_eval_r:1,id:C.id},z.origin)};try{const w=(0,eval)(C.code);if(w&&typeof w.then==="function"){w.then((K)=>D({ok:1,v:b(K)}),(K)=>D({ok:0,e:String(K)}))}else{D({ok:1,v:b(w)})}}catch(w){D({ok:0,e:String(w)})}})}})();
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>José Suárez — Consultor IA para Peluquerías</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,500;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070710;--s1:#0d0d1f;--s2:#13132b;--s3:#191935;
+  --indigo:#6366f1;--violet:#8b5cf6;--purple:#a855f7;--pink:#ec4899;
+  --grad:linear-gradient(135deg,#6366f1,#8b5cf6,#a855f7);
+  --grad2:linear-gradient(135deg,#6366f1,#a855f7);
+  --text:#eeeeff;--muted:#6e6e9a;--border:rgba(99,102,241,0.18);
+  --r:18px;--r-lg:28px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:2px}::-webkit-scrollbar-thumb{background:var(--indigo)}
+#prog{position:fixed;top:0;left:0;height:2px;background:var(--grad);z-index:999;width:0}
+/* NAV */
+nav{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:200;background:rgba(7,7,16,0.8);backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,0.08);border-radius:100px;padding:8px 8px 8px 24px;display:flex;align-items:center;gap:28px;white-space:nowrap}
+.nav-logo{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:15px;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:10px}
+.nav-logo img{width:32px;height:32px;border-radius:50%;border:2px solid transparent;background:linear-gradient(var(--bg),var(--bg)) padding-box,var(--grad) border-box}
+.nav-links{display:flex;gap:24px;list-style:none}
+.nav-links a{color:var(--muted);font-size:13px;text-decoration:none;transition:color .3s}
+.nav-links a:hover{color:var(--text)}
+.nav-cta{background:var(--grad);color:#fff;padding:10px 22px;border-radius:100px;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;transition:opacity .3s,transform .3s}
+.nav-cta:hover{opacity:.85;transform:scale(1.03)}
+/* BANNER */
+.banner{background:linear-gradient(90deg,rgba(99,102,241,.15),rgba(168,85,247,.1));border-bottom:1px solid var(--border);text-align:center;padding:10px 20px;font-size:13px;color:var(--muted)}
+.banner a{color:var(--indigo);font-weight:500;text-decoration:none;margin-left:6px}
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;padding:140px 60px 80px;position:relative;overflow:hidden}
+.grid-bg{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(99,102,241,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black,transparent)}
+.hero-orb{position:absolute;border-radius:50%;filter:blur(100px);pointer-events:none}
+.orb1{width:600px;height:600px;top:-200px;right:-100px;background:rgba(99,102,241,.2)}
+.orb2{width:400px;height:400px;bottom:-100px;left:-100px;background:rgba(168,85,247,.15)}
+.hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:1fr 460px;gap:80px;align-items:center;max-width:1280px;margin:0 auto;width:100%}
+.hero-chip{display:inline-flex;align-items:center;gap:8px;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.3);border-radius:100px;padding:6px 18px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--indigo);margin-bottom:28px}
+.hero-chip::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--indigo);animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero-h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(52px,6.5vw,94px);line-height:.93;letter-spacing:-.03em;margin-bottom:28px}
+.gt{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:17px;color:var(--muted);line-height:1.75;max-width:460px;margin-bottom:48px;font-weight:300}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:64px}
+.btn-grad{background:var(--grad);color:#fff;padding:15px 32px;border-radius:100px;font-size:14px;font-weight:700;letter-spacing:.04em;text-decoration:none;transition:all .3s;display:inline-flex;align-items:center;gap:8px}
+.btn-grad:hover{opacity:.85;transform:translateY(-3px);box-shadow:0 20px 60px rgba(99,102,241,.35)}
+.btn-ghost{border:1px solid rgba(255,255,255,.12);color:var(--text);padding:15px 32px;border-radius:100px;font-size:14px;text-decoration:none;transition:all .3s;display:inline-flex;align-items:center;gap:8px}
+.btn-ghost:hover{border-color:rgba(99,102,241,.5);color:var(--indigo)}
+.hero-stats{display:flex;background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+.h-stat{flex:1;padding:24px 28px;border-right:1px solid var(--border)}
+.h-stat:last-child{border-right:none}
+.h-num{font-family:'Bricolage Grotesque',sans-serif;font-size:36px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.h-lbl{font-size:11px;color:var(--muted);margin-top:6px;letter-spacing:.04em}
+.hero-photo-wrap{border-radius:var(--r-lg);overflow:hidden;position:relative}
+.hero-photo-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(7,7,16,.9));pointer-events:none}
+.hero-photo-wrap img{width:100%;display:block;border-radius:var(--r-lg)}
+.photo-badge{position:absolute;bottom:24px;left:24px;right:24px;z-index:2;background:rgba(7,7,16,.7);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:var(--r);padding:18px 22px;display:flex;align-items:center;justify-content:space-between}
+.pb-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.pb-val{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:700;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-top:4px}
+.pb-icon{width:48px;height:48px;border-radius:50%;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);display:flex;align-items:center;justify-content:center;font-size:20px}
+/* MARQUEE */
+.marquee-outer{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:16px 0;background:var(--s1)}
+.marquee-track{display:flex;width:max-content;animation:mq 30s linear infinite}
+@keyframes mq{to{transform:translateX(-50%)}}
+.mq-item{display:flex;align-items:center;gap:18px;padding:0 32px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.mq-dot{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:18px}
+
+/* ═══ SCROLL STORY 3D ═══ */
+.story-outer{height:420vh;position:relative}
+.story-pin{position:sticky;top:0;height:100vh;overflow:hidden;background:var(--bg)}
+.s-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(99,102,241,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,.04) 1px,transparent 1px);background-size:60px 60px}
+/* Ambient layers */
+.s-amb{position:absolute;inset:0;opacity:0;transition:opacity .6s;pointer-events:none}
+#sa1{background:radial-gradient(ellipse 70% 60% at 65% 45%,rgba(99,102,241,.15) 0%,transparent 70%)}
+#sa2{background:radial-gradient(ellipse 70% 60% at 35% 55%,rgba(139,92,246,.18) 0%,transparent 70%)}
+#sa3{background:radial-gradient(ellipse 70% 60% at 55% 35%,rgba(168,85,247,.15) 0%,transparent 70%)}
+#sa4{background:radial-gradient(ellipse 80% 70% at 50% 60%,rgba(236,72,153,.12) 0%,transparent 70%)}
+
+/* ── 3D OBJECT ASSEMBLY ── */
+.obj-stage{
+  position:absolute;right:6%;top:50%;
+  transform:translateY(-50%);
+  width:420px;height:420px;
+  perspective:900px;perspective-origin:50% 50%;
+}
+.obj-inner{
+  width:100%;height:100%;
+  position:relative;
+  transform-style:preserve-3d;
+  animation:objFloat 5s ease-in-out infinite;
+}
+@keyframes objFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+.obj-card{
+  position:absolute;
+  border-radius:16px;
+  background:rgba(13,13,31,0.7);
+  border:1px solid rgba(99,102,241,0.35);
+  backdrop-filter:blur(12px);
+  box-shadow:0 8px 32px rgba(99,102,241,0.15),inset 0 1px 0 rgba(255,255,255,0.08);
+  padding:20px;
+  will-change:transform,opacity;
+  transform-style:preserve-3d;
+}
+/* Card sizes and assembled positions */
+.oc1{width:240px;height:160px;top:60px;left:90px}
+.oc2{width:200px;height:140px;top:100px;left:70px}
+.oc3{width:220px;height:130px;top:140px;left:80px}
+.oc4{width:180px;height:120px;top:180px;left:110px}
+/* Card inner content */
+.oc-tag{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--indigo);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.oc-tag::before{content:'';width:16px;height:1px;background:var(--indigo)}
+.oc-title{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px}
+.oc-line{height:1px;background:var(--border);margin:10px 0}
+.oc-row{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.oc-stat{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.oc-sub{font-size:10px;color:var(--muted)}
+/* Mini chart inside card */
+.mini-bars{display:flex;align-items:flex-end;gap:3px;height:32px}
+.mb{width:8px;background:linear-gradient(to top,var(--indigo),var(--violet));border-radius:2px 2px 0 0;transition:height .3s}
+/* Calendar dots */
+.oc-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-top:8px}
+.oc-cal-dot{width:8px;height:8px;border-radius:50%;background:rgba(99,102,241,.2)}
+.oc-cal-dot.filled{background:var(--indigo)}
+.oc-cal-dot.grad{background:linear-gradient(135deg,var(--indigo),var(--purple))}
+/* Chat bubbles */
+.oc-bubble{background:rgba(99,102,241,.15);border-radius:12px 12px 12px 2px;padding:6px 10px;font-size:10px;color:var(--muted);margin-bottom:6px;width:fit-content;max-width:80%}
+.oc-bubble.right{margin-left:auto;border-radius:12px 12px 2px 12px;background:rgba(168,85,247,.15)}
+/* Tools grid */
+.oc-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.oc-tool{background:rgba(99,102,241,.1);border:1px solid var(--border);border-radius:8px;padding:6px;text-align:center;font-size:14px}
+
+/* Story chapters (text side) */
+.s-chapter{position:absolute;left:7%;width:min(500px,42%);top:50%;opacity:0;transform:translateY(calc(-50% + 24px));transition:opacity .45s cubic-bezier(.4,0,.2,1),transform .45s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.s-chapter.vis{opacity:1;transform:translateY(-50%);pointer-events:auto}
+.s-chapter.out{opacity:0;transform:translateY(calc(-50% - 24px))}
+.ch-num{font-family:'Bricolage Grotesque',sans-serif;font-size:96px;font-weight:800;line-height:1;color:rgba(99,102,241,.06);position:absolute;top:-44px;left:-8px;letter-spacing:-.04em;user-select:none}
+.ch-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.25);border-radius:100px;padding:5px 16px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--indigo);margin-bottom:20px}
+.ch-h2{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(32px,3.5vw,52px);font-weight:800;line-height:1.0;letter-spacing:-.025em;margin-bottom:18px}
+.ch-p{font-size:16px;color:var(--muted);line-height:1.75;margin-bottom:24px;font-weight:300}
+.ch-pills{display:flex;gap:8px;flex-wrap:wrap}
+.ch-pill{background:var(--s2);border:1px solid var(--border);border-radius:100px;padding:7px 16px;font-size:12px;color:var(--text)}
+/* Dots */
+.s-dots{position:absolute;right:36px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:10}
+.s-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.15);transition:all .4s;cursor:pointer}
+.s-dot.on{background:var(--indigo);transform:scale(1.5)}
+.s-hint{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);z-index:10;transition:opacity .4s}
+.s-hint-box{width:22px;height:34px;border:1px solid rgba(255,255,255,.18);border-radius:100px;display:flex;justify-content:center;padding-top:5px}
+.s-hint-dot{width:3px;height:3px;border-radius:50%;background:var(--indigo);animation:sh 1.6s ease-in-out infinite}
+@keyframes sh{0%{opacity:1;transform:translateY(0)}80%{opacity:0;transform:translateY(14px)}100%{opacity:0}}
+
+/* ── SHARED SECTION STYLES ── */
+.sec{padding:120px 60px;max-width:1280px;margin:0 auto}
+.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--indigo);margin-bottom:18px;display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:'';width:28px;height:1px;background:var(--indigo)}
+.sec-h2{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(36px,4.5vw,62px);font-weight:800;line-height:1.0;letter-spacing:-.025em;margin-bottom:24px}
+.rv{opacity:0;transform:translateY(40px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1)}
+.rv.in{opacity:1;transform:none}
+.d1{transition-delay:.1s!important}.d2{transition-delay:.2s!important}.d3{transition-delay:.3s!important}.d4{transition-delay:.4s!important}
+.rv-l{opacity:0;transform:translateX(-40px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1)}
+.rv-l.in,.rv-r.in{opacity:1;transform:none}
+.rv-r{opacity:0;transform:translateX(40px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1)}
+.wdiv{overflow:hidden;line-height:0;padding:0 60px}
+.wdiv svg{display:block;width:100%;height:48px}
+
+/* SERVICIOS */
+.sv-grid{display:grid;grid-template-columns:1.4fr 1fr;grid-template-rows:auto auto;gap:18px;margin-top:60px}
+.sv-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:40px;position:relative;overflow:hidden;transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s,border-color .4s}
+.sv-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad);transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.sv-card:hover{transform:translateY(-6px);box-shadow:0 28px 70px rgba(0,0,0,.5);border-color:rgba(99,102,241,.35)}
+.sv-card:hover::before{transform:scaleX(1)}
+.sv-card.feat{grid-row:1/3;background:linear-gradient(160deg,var(--s2) 0%,var(--s1) 100%)}
+.sv-pop{position:absolute;top:20px;right:20px;padding:5px 14px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--grad);color:#fff}
+.sv-price{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+.sv-name{font-family:'Bricolage Grotesque',sans-serif;font-size:28px;font-weight:800;margin-bottom:14px;letter-spacing:-.01em}
+.sv-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:28px}
+.sv-feats{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:36px}
+.sv-feats li{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.04)}
+.sv-feats li::before{content:'→';color:var(--indigo);font-size:12px;flex-shrink:0}
+.sv-cta{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(99,102,241,.4);color:var(--indigo);padding:11px 24px;border-radius:100px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;transition:all .3s}
+.sv-cta:hover{background:var(--grad);border-color:transparent;color:#fff}
+/* CURSO */
+.curso-wrap{background:linear-gradient(135deg,var(--s2),var(--s1));border:1px solid var(--border);border-radius:var(--r-lg);padding:80px;display:grid;grid-template-columns:1fr 320px;gap:80px;align-items:center;position:relative;overflow:hidden}
+.curso-orb{position:absolute;width:400px;height:400px;top:-150px;right:-100px;background:radial-gradient(circle,rgba(99,102,241,.12),transparent 70%);pointer-events:none}
+.curso-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.3);border-radius:100px;padding:5px 16px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--indigo);margin-bottom:20px}
+.curso-h2{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(28px,3vw,46px);font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:16px}
+.curso-p{font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:32px;font-weight:300}
+.curso-list{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:36px}
+.curso-list li{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--muted)}
+.curso-list li::before{content:'';width:20px;height:20px;flex-shrink:0;border-radius:50%;background:rgba(99,102,241,.15);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8l3.5 3.5 6.5-7' stroke='%236366f1' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;background-size:12px}
+.curso-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r-lg);padding:36px;text-align:center;position:relative}
+.curso-cbadge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--grad);color:#fff;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 16px;border-radius:100px;white-space:nowrap}
+.curso-ctitle{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800;margin-bottom:6px;padding-top:8px}
+.curso-csub{font-size:13px;color:var(--muted);margin-bottom:24px}
+.curso-cfeats{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
+.curso-cfeats li{font-size:13px;color:var(--muted);padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.btn-grad-b{display:block;background:var(--grad);color:#fff;padding:14px 20px;border-radius:100px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;transition:all .3s}
+.btn-grad-b:hover{opacity:.85;transform:translateY(-2px);box-shadow:0 14px 40px rgba(99,102,241,.3)}
+/* FORMACIÓN */
+.form-feat{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:52px;display:flex;justify-content:space-between;align-items:center;gap:48px;margin-bottom:20px;position:relative;overflow:hidden}
+.form-feat::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--grad)}
+.badge-row{display:flex;gap:8px;margin-bottom:14px}
+.pill-tag{background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);color:var(--indigo);padding:4px 14px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.form-ftitle{font-family:'Bricolage Grotesque',sans-serif;font-size:26px;font-weight:800;margin-bottom:10px}
+.form-fdesc{font-size:14px;color:var(--muted);line-height:1.7}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+.form-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:36px;transition:transform .4s,border-color .4s}
+.form-card:hover{transform:translateY(-4px);border-color:rgba(99,102,241,.3)}
+.form-clvl{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--indigo);margin-bottom:12px}
+.form-card h3{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:700;margin-bottom:10px}
+.form-card p{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.6}
+.form-card ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.form-card ul li{font-size:12px;color:var(--muted);padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,.04);display:flex;align-items:flex-start;gap:6px}
+.form-card ul li::before{content:'·';color:var(--indigo)}
+.form-extras{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.form-extra{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:24px;text-align:center}
+.form-extra-icon{width:44px;height:44px;border-radius:50%;background:rgba(99,102,241,.12);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:20px}
+.form-extra h4{font-size:13px;font-weight:600;margin-bottom:6px}
+.form-extra p{font-size:11px;color:var(--muted);line-height:1.5}
+/* CREDENCIALES */
+.cred-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:60px}
+.cred-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:48px;position:relative;overflow:hidden;transition:transform .4s,border-color .4s}
+.cred-card:hover{transform:translateY(-4px);border-color:rgba(99,102,241,.3)}
+.cred-card::after{content:'';position:absolute;top:-80px;right:-80px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,.08),transparent 70%)}
+.cred-icon{width:56px;height:56px;border-radius:var(--r);background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.25);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:28px}
+.cred-lbl{font-size:10px;color:var(--indigo);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.cred-title{font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:800;margin-bottom:6px}
+.cred-sub{font-size:13px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px}
+.cred-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:24px}
+.cred-tags{display:flex;flex-wrap:wrap;gap:8px}
+.cred-tag{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);padding:4px 12px;border-radius:100px;font-size:11px;color:var(--muted)}
+.cred-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+.cred-list li{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+.cred-list li::before{content:'';width:6px;height:6px;flex-shrink:0;border-radius:50%;background:var(--grad)}
+.cred-banner{margin-top:20px;background:linear-gradient(135deg,rgba(99,102,241,.07),rgba(168,85,247,.05));border:1px solid var(--border);border-radius:var(--r);padding:28px 36px;font-size:15px;color:var(--muted);line-height:1.75}
+.cred-banner strong{color:var(--text)}
+/* CONTACTO TABS */
+.ct-tabs{display:flex;gap:0;background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;margin-bottom:36px}
+.ct-tab{flex:1;padding:16px 24px;text-align:center;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted);transition:all .3s;border:none;background:none;font-family:'DM Sans',sans-serif}
+.ct-tab.active{background:var(--grad);color:#fff}
+.ct-panel{display:none}
+.ct-panel.active{display:grid;grid-template-columns:360px 1fr;gap:60px}
+.ci-block{margin-bottom:32px}
+.ci-lbl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.ci-val{font-size:15px;color:var(--text)}
+.ci-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.ci-box{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:28px}
+.ci-box h4{font-size:13px;font-weight:600;margin-bottom:14px}
+.ci-box ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.ci-box ul li{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--muted)}
+.ci-box ul li::before{content:'→';color:var(--indigo);flex-shrink:0}
+.fg{margin-bottom:16px}
+.fl{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.fc{width:100%;background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .3s,box-shadow .3s}
+.fc:focus{border-color:rgba(99,102,241,.6);box-shadow:0 0 0 3px rgba(99,102,241,.08)}
+.fc::placeholder{color:rgba(110,110,154,.4)}
+textarea.fc{resize:vertical;min-height:110px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.btn-sub{width:100%;background:var(--grad);color:#fff;padding:16px;border:none;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .3s;margin-top:8px}
+.btn-sub:hover{opacity:.85;transform:translateY(-2px);box-shadow:0 14px 40px rgba(99,102,241,.3)}
+.form-ok{display:none;background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.3);border-radius:var(--r);padding:20px;text-align:center;color:var(--indigo);font-size:14px;margin-top:16px}
+/* PROCESO */
+.proc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.proc-step{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:32px 28px;position:relative;transition:transform .4s,border-color .4s}
+.proc-step:hover{transform:translateY(-4px);border-color:rgba(99,102,241,.3)}
+.proc-num{font-family:'Bricolage Grotesque',sans-serif;font-size:48px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:20px}
+.proc-step h3{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:700;margin-bottom:10px}
+.proc-step p{font-size:13px;color:var(--muted);line-height:1.6}
+/* CASOS */
+.cases-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:60px}
+.case-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:36px;transition:transform .4s,border-color .4s;position:relative;overflow:hidden}
+.case-card:hover{transform:translateY(-4px);border-color:rgba(99,102,241,.3)}
+.case-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad);transform:scaleX(0);transform-origin:left;transition:transform .5s}
+.case-card:hover::before{transform:scaleX(1)}
+.case-badge{display:inline-block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--indigo);margin-bottom:14px;background:rgba(99,102,241,.1);padding:4px 12px;border-radius:100px}
+.case-card h3{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;margin-bottom:18px;line-height:1.25}
+.case-quote{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:24px;font-style:italic;padding-left:14px;border-left:2px solid var(--indigo)}
+.case-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding-top:20px;border-top:1px solid var(--border)}
+.case-stat-val{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.case-stat-lbl{font-size:10px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.05em}
+/* TESTIMONIOS */
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:60px}
+.test-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:36px;transition:transform .4s,border-color .4s;display:flex;flex-direction:column}
+.test-card:hover{transform:translateY(-4px);border-color:rgba(99,102,241,.3)}
+.test-stars{color:#fbbf24;font-size:14px;margin-bottom:16px;letter-spacing:2px}
+.test-card p{font-size:14px;color:var(--text);line-height:1.7;margin-bottom:24px;flex:1}
+.test-author{display:flex;align-items:center;gap:12px;padding-top:18px;border-top:1px solid var(--border)}
+.test-avatar{width:40px;height:40px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+.test-author strong{display:block;font-size:13px;font-weight:600;line-height:1.3}
+.test-author span{display:block;font-size:11px;color:var(--muted);margin-top:3px;line-height:1.3}
+.test-author>div{min-width:0;flex:1}
+/* LEAD MAGNET */
+.lead-wrap{background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(168,85,247,.05));border:1px solid rgba(99,102,241,.25);border-radius:var(--r-lg);padding:60px;display:grid;grid-template-columns:1.2fr 1fr;gap:60px;align-items:center;position:relative;overflow:hidden}
+.lead-orb{position:absolute;width:400px;height:400px;top:-150px;right:-100px;background:radial-gradient(circle,rgba(99,102,241,.15),transparent 70%);pointer-events:none}
+.lead-tag{display:inline-block;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);border-radius:100px;padding:5px 16px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--indigo);margin-bottom:18px;font-weight:700}
+.lead-h2{font-family:'Bricolage Grotesque',sans-serif;font-size:clamp(26px,3vw,40px);font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:14px}
+.lead-p{font-size:14px;color:var(--muted);line-height:1.7;font-weight:300}
+.lead-form{display:flex;flex-direction:column;gap:12px;position:relative;z-index:2}
+.lead-form button{padding:15px 32px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif}
+/* FAQ */
+.faq-list{display:flex;flex-direction:column;gap:10px;margin-top:60px;max-width:820px}
+.faq-item{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:border-color .3s}
+.faq-item[open]{border-color:rgba(99,102,241,.3)}
+.faq-item summary{list-style:none;padding:22px 28px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;font-weight:500;font-size:15px;transition:color .2s}
+.faq-item summary:hover{color:var(--indigo)}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-plus{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:rgba(99,102,241,.1);color:var(--indigo);display:flex;align-items:center;justify-content:center;font-size:18px;transition:transform .3s,background .3s}
+.faq-item[open] .faq-plus{transform:rotate(45deg);background:var(--grad);color:#fff}
+.faq-item p{padding:0 28px 24px;font-size:14px;color:var(--muted);line-height:1.75}
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:32px 60px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted)}
+footer a{color:var(--muted);text-decoration:none;transition:color .3s}
+footer a:hover{color:var(--indigo)}
+.footer-admin{display:flex;align-items:center;gap:6px;background:rgba(99,102,241,.08);border:1px solid var(--border);border-radius:100px;padding:7px 16px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--indigo)}
+.footer-admin:hover{background:rgba(99,102,241,.15)}
+#btt{position:fixed;bottom:36px;right:36px;z-index:50;width:44px;height:44px;border-radius:50%;background:var(--s1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--indigo);text-decoration:none;font-size:18px;opacity:0;transform:translateY(16px);transition:opacity .3s,transform .3s}
+#btt.show{opacity:1;transform:none}
+@media(max-width:900px){
+  nav{top:12px;padding:8px 8px 8px 18px;gap:16px}.nav-links{display:none}
+  .hero{padding:100px 24px 60px}.hero-inner{grid-template-columns:1fr;gap:40px}
+  .obj-stage{display:none}.s-chapter{width:86%;left:6%}
+  .sec{padding:80px 24px}
+  .sv-grid,.form-grid,.cred-grid,.proc-grid,.cases-grid,.test-grid{grid-template-columns:1fr}.lead-wrap{grid-template-columns:1fr;padding:36px;gap:32px}.sv-card.feat{grid-row:auto}
+  .curso-wrap{grid-template-columns:1fr;padding:40px}
+  .form-feat{flex-direction:column;align-items:flex-start;gap:24px;padding:36px}
+  .form-extras{grid-template-columns:1fr 1fr}
+  .ct-panel.active{grid-template-columns:1fr;gap:36px}
+  footer{flex-direction:column;gap:12px;text-align:center;padding:24px}
+  .wdiv{padding:0 24px}
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+<a href="#" id="btt">↑</a>
+
+<div class="banner">🎓 Nuevo Curso Online: IA para Peluqueros — Guía práctica desde 0 <a href="https://go.hotmart.com/Y103319213K" target="_blank">Ver Curso →</a></div>
+
+<nav>
+  <a href="#" class="nav-logo">
+    <img src="https://josesuarez.abacusai.app/logo.jpg" alt="José Suárez">
+    José Suárez
+  </a>
+  <ul class="nav-links">
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#formacion">Formación</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <a href="#contacto" class="nav-cta">Auditoría Gratuita</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="grid-bg"></div>
+  <div class="hero-orb orb1"></div>
+  <div class="hero-orb orb2"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-chip" id="hChip" style="opacity:0">Transformación Digital Real</div>
+      <h1 class="hero-h1">
+        <span style="overflow:hidden;display:block"><span id="hl1" style="display:block;transform:translateY(110%)">Consultor</span></span>
+        <span style="overflow:hidden;display:block"><span id="hl2" style="display:block;transform:translateY(110%)"><span class="gt">IA</span> para</span></span>
+        <span style="overflow:hidden;display:block"><span id="hl3" style="display:block;transform:translateY(110%)">Peluquerías</span></span>
+      </h1>
+      <p class="hero-sub" id="hSub" style="opacity:0">Peluquero con 30 años de experiencia + Consultor de IA. No soy un teórico — aplico IA en mi negocio real y te enseño cómo transformar el tuyo.</p>
+      <div id="hBtns" class="hero-btns" style="opacity:0">
+        <a href="#contacto" class="btn-grad">Solicita tu Auditoría →</a>
+        <a href="#servicios" class="btn-ghost">Ver Servicios</a>
+      </div>
+      <div id="hStats" class="hero-stats" style="opacity:0">
+        <div class="h-stat"><div class="h-num" data-count="30">0</div><div class="h-lbl">Años de experiencia</div></div>
+        <div class="h-stat"><div class="h-num">100%</div><div class="h-lbl">Aplicación real</div></div>
+        <div class="h-stat"><div class="h-num">IA</div><div class="h-lbl">Máster Microsoft</div></div>
+      </div>
+    </div>
+    <div class="rv-r" id="hPhoto">
+      <div class="hero-photo-wrap">
+        <img src="https://josesuarez.abacusai.app/jose-suarez.jpg" alt="José Suárez">
+        <div class="photo-badge">
+          <div><div class="pb-lbl">Certificado</div><div class="pb-val">Máster IA</div></div>
+          <div class="pb-icon">🎓</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-outer">
+  <div class="marquee-track" id="mtrack"></div>
+</div>
+
+<!-- SCROLL STORY 3D -->
+<div class="story-outer" id="storyOuter">
+  <div class="story-pin" id="storyPin">
+    <div class="s-grid"></div>
+    <div class="s-amb" id="sa1" style="opacity:1"></div>
+    <div class="s-amb" id="sa2"></div>
+    <div class="s-amb" id="sa3"></div>
+    <div class="s-amb" id="sa4"></div>
+
+    <!-- 3D Object Assembly -->
+    <div class="obj-stage" id="objStage">
+      <div class="obj-inner" id="objInner">
+        <!-- Card 1: Analytics -->
+        <div class="obj-card oc1" id="oc1">
+          <div class="oc-tag">Analytics</div>
+          <div class="oc-title">Rendimiento del Salón</div>
+          <div class="oc-line"></div>
+          <div class="oc-row">
+            <div><div class="oc-stat">+34%</div><div class="oc-sub">Ingresos este mes</div></div>
+            <div class="mini-bars" id="miniBars"></div>
+          </div>
+        </div>
+        <!-- Card 2: Calendar -->
+        <div class="obj-card oc2" id="oc2">
+          <div class="oc-tag">Agenda</div>
+          <div class="oc-title">Próximas Auditorías</div>
+          <div class="oc-cal" id="ocCal"></div>
+        </div>
+        <!-- Card 3: Chat AI -->
+        <div class="obj-card oc3" id="oc3">
+          <div class="oc-tag">Asistente IA</div>
+          <div class="oc-bubble">¿Cómo mejorar la fidelización?</div>
+          <div class="oc-bubble right">Automatiza recordatorios por WhatsApp…</div>
+        </div>
+        <!-- Card 4: Tools -->
+        <div class="obj-card oc4" id="oc4">
+          <div class="oc-tag">Herramientas</div>
+          <div class="oc-tools">
+            <div class="oc-tool">🤖</div><div class="oc-tool">📊</div><div class="oc-tool">📱</div>
+            <div class="oc-tool">✉️</div><div class="oc-tool">🗓</div><div class="oc-tool">💡</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chapters -->
+    <div class="s-chapter vis" id="sch0">
+      <div class="ch-num">01</div>
+      <div class="ch-tag">Mi Ventaja</div>
+      <h2 class="ch-h2">30 años siendo<br><span class="gt">peluquero real</span></h2>
+      <p class="ch-p">No soy un consultor teórico. Gestiono mi propio salón y aplico IA a diario. Conozco cada desafío de tu negocio porque es el mío.</p>
+      <div class="ch-pills"><span class="ch-pill">Peluquero en activo</span><span class="ch-pill">Resultados reales</span></div>
+    </div>
+    <div class="s-chapter" id="sch1">
+      <div class="ch-num">02</div>
+      <div class="ch-tag">Formación</div>
+      <h2 class="ch-h2">Máster IA<br><span class="gt">Microsoft & FounderZ</span></h2>
+      <p class="ch-p">Certificado con formación especializada en IA aplicada a negocios. Machine Learning, NLP, Automatización, ChatGPT y Prompting avanzado.</p>
+      <div class="ch-pills"><span class="ch-pill">Machine Learning</span><span class="ch-pill">NLP</span><span class="ch-pill">ChatGPT</span></div>
+    </div>
+    <div class="s-chapter" id="sch2">
+      <div class="ch-num">03</div>
+      <div class="ch-tag">La Combinación</div>
+      <h2 class="ch-h2">Experiencia real<br><span class="gt">+ tecnología</span></h2>
+      <p class="ch-p">"La teoría sin práctica es vacía." Te ofrezco ambas: experiencia real en peluquería + formación avanzada en IA. La combinación perfecta.</p>
+      <div class="ch-pills"><span class="ch-pill">Enfoque práctico</span><span class="ch-pill">Soluciones probadas</span></div>
+    </div>
+    <div class="s-chapter" id="sch3">
+      <div class="ch-num">04</div>
+      <div class="ch-tag">El Resultado</div>
+      <h2 class="ch-h2">Tu peluquería<br><span class="gt">transformada</span></h2>
+      <p class="ch-p">Herramientas reales de IA integradas en tu negocio: agenda automatizada, analytics, asistente IA y mucho más.</p>
+      <a href="#contacto" class="btn-grad" style="display:inline-flex;margin-top:12px">Ver mis servicios →</a>
+    </div>
+
+    <div class="s-dots" id="sDots">
+      <div class="s-dot on" data-i="0"></div>
+      <div class="s-dot" data-i="1"></div>
+      <div class="s-dot" data-i="2"></div>
+      <div class="s-dot" data-i="3"></div>
+    </div>
+    <div class="s-hint" id="sHint">
+      <div class="s-hint-box"><div class="s-hint-dot"></div></div>
+      Scroll para descubrir
+    </div>
+  </div>
+</div>
+
+<!-- Wave -->
+<div class="wdiv"><svg viewBox="0 0 1200 48" preserveAspectRatio="none"><path d="M0,24 C200,48 400,0 600,24 C800,48 1000,0 1200,24 L1200,48 L0,48Z" fill="rgba(99,102,241,0.05)"/><path d="M0,32 C300,12 600,44 900,20 C1050,12 1150,28 1200,32" fill="none" stroke="rgba(99,102,241,0.1)" stroke-width="1"/></svg></div>
+
+<!-- SERVICIOS -->
+<div class="sec" id="servicios">
+  <div class="eyebrow rv">Servicios</div>
+  <h2 class="sec-h2 rv d1">Cómo puedo<br><span class="gt">ayudarte</span></h2>
+  <p class="rv d2" style="color:var(--muted);font-size:15px;line-height:1.7;max-width:480px;font-weight:300">Soluciones de IA personalizadas para transformar tu peluquería.</p>
+  <div class="sv-grid">
+    <div class="sv-card feat rv d1">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 80% 30%,rgba(99,102,241,.08),transparent);pointer-events:none"></div>
+      <div class="sv-pop">Más Popular</div>
+      <div style="height:36px"></div>
+      <div class="sv-price">Desde 750€</div>
+      <h3 class="sv-name">Implementación</h3>
+      <p class="sv-desc">Implementación completa de soluciones IA adaptadas a tu peluquería. Desde configuración hasta soporte continuo.</p>
+      <ul class="sv-feats"><li>Configuración de herramientas</li><li>Automatización de procesos</li><li>Integración con sistemas</li><li>Soporte continuo 3 meses</li></ul>
+      <a href="#contacto" class="sv-cta">Solicitar Información →</a>
+    </div>
+    <div class="sv-card rv d2">
+      <div class="sv-price">Desde 250€</div>
+      <h3 class="sv-name">Auditoría IA</h3>
+      <p class="sv-desc">Análisis completo de tu negocio para identificar oportunidades de mejora con IA.</p>
+      <ul class="sv-feats"><li>Análisis de procesos</li><li>Hoja de ruta personalizada</li><li>ROI proyectado</li></ul>
+      <a href="#contacto" class="sv-cta">Solicitar →</a>
+    </div>
+    <div class="sv-card rv d3">
+      <div class="sv-price">Consultar</div>
+      <h3 class="sv-name">Formación</h3>
+      <p class="sv-desc">Capacitación práctica para tu equipo en el uso de herramientas IA.</p>
+      <ul class="sv-feats"><li>Sesiones en vivo o grabadas</li><li>Material didáctico incluido</li><li>Certificado de finalización</li></ul>
+      <a href="#contacto" class="sv-cta">Solicitar →</a>
+    </div>
+  </div>
+  <p class="rv" style="text-align:center;color:var(--muted);font-size:14px;margin-top:32px">¿No estás seguro? <a href="#contacto" style="color:var(--indigo);text-decoration:none">Contáctame para una consulta gratuita →</a></p>
+</div>
+
+<!-- CURSO -->
+<div class="sec" style="padding-top:0">
+  <div class="eyebrow rv">Curso Destacado</div>
+  <div class="curso-wrap rv">
+    <div class="curso-orb"></div>
+    <div>
+      <div class="curso-tag">Nuevo · Acceso Inmediato</div>
+      <h2 class="curso-h2">Domina la IA<br>en tu Peluquería</h2>
+      <p class="curso-p">El curso online más completo para profesionales del sector. Aprende paso a paso con casos prácticos de mi propia peluquería.</p>
+      <ul class="curso-list"><li>100% online, aprende a tu ritmo</li><li>Casos prácticos reales</li><li>Sin tecnicismos</li><li>Acceso de por vida + garantía 15 días</li></ul>
+      <a href="https://go.hotmart.com/Y103319213K" target="_blank" class="btn-grad">Acceder al Curso →</a>
+    </div>
+    <div class="curso-card">
+      <div class="curso-cbadge">Más vendido</div>
+      <div class="curso-ctitle">IA para Peluqueros</div>
+      <div class="curso-csub">Guía práctica desde 0</div>
+      <ul class="curso-cfeats"><li>Vídeos paso a paso</li><li>Material descargable</li><li>Certificado incluido</li><li>Soporte de por vida</li></ul>
+      <a href="https://go.hotmart.com/Y103319213K" target="_blank" class="btn-grad-b">Acceso Inmediato</a>
+    </div>
+  </div>
+</div>
+
+<!-- FORMACIÓN -->
+<div class="sec" id="formacion" style="padding-top:0">
+  <div class="eyebrow rv">Formación</div>
+  <h2 class="sec-h2 rv d1">Aprende IA en<br><span class="gt">tu peluquería</span></h2>
+  <div class="form-feat rv">
+    <div><div class="badge-row"><span class="pill-tag">Curso Online</span><span class="pill-tag">Acceso Inmediato</span></div><h3 class="form-ftitle">Domina la IA para tu Peluquería</h3><p class="form-fdesc">Vídeos paso a paso · Material descargable · Certificado incluido · Soporte de por vida</p></div>
+    <a href="https://go.hotmart.com/Y103319213K" target="_blank" class="btn-grad" style="white-space:nowrap;flex-shrink:0">Acceder →</a>
+  </div>
+  <div class="form-grid">
+    <div class="form-card rv d1"><div class="form-clvl">— Básica</div><h3>Formación Básica</h3><p>Introducción a la IA aplicada al sector.</p><ul><li>Introducción a ChatGPT y similares</li><li>Automatización de tareas administrativas</li><li>Marketing y redes sociales con IA</li><li>Gestión de clientes inteligente</li></ul></div>
+    <div class="form-card rv d2"><div class="form-clvl" style="color:var(--violet)">— Avanzada</div><h3>Formación Avanzada</h3><p>Domina técnicas avanzadas de IA.</p><ul><li>Asistentes virtuales personalizados</li><li>Análisis predictivo de ventas</li><li>Integración con sistemas existentes</li><li>Automatización de campañas</li></ul></div>
+  </div>
+  <div class="form-extras">
+    <div class="form-extra rv d1"><div class="form-extra-icon">▶</div><h4>En Vivo o Grabadas</h4><p>Flexible según tus horarios</p></div>
+    <div class="form-extra rv d2"><div class="form-extra-icon">📋</div><h4>Material Práctico</h4><p>Guías y plantillas descargables</p></div>
+    <div class="form-extra rv d3"><div class="form-extra-icon">✓</div><h4>Casos Reales</h4><p>Ejemplos de mi propia peluquería</p></div>
+    <div class="form-extra rv d4"><div class="form-extra-icon">🏆</div><h4>Certificación</h4><p>Certificado oficial incluido</p></div>
+  </div>
+</div>
+
+<!-- PROCESO -->
+<div class="sec" id="proceso">
+  <div class="eyebrow rv">Metodología</div>
+  <h2 class="sec-h2 rv d1">Cómo trabajamos<br><span class="gt">juntos</span></h2>
+  <p class="rv d2" style="color:var(--muted);font-size:15px;line-height:1.7;max-width:480px;font-weight:300;margin-bottom:60px">Un proceso probado en 4 fases para transformar tu peluquería con IA.</p>
+  <div class="proc-grid">
+    <div class="proc-step rv d1"><div class="proc-num">01</div><h3>Auditoría</h3><p>Analizo tu negocio, procesos y oportunidades. Llamada de 60 min + informe detallado.</p></div>
+    <div class="proc-step rv d2"><div class="proc-num">02</div><h3>Estrategia</h3><p>Diseño una hoja de ruta personalizada con herramientas IA concretas y ROI proyectado.</p></div>
+    <div class="proc-step rv d3"><div class="proc-num">03</div><h3>Implementación</h3><p>Configuro e integro las herramientas en tu día a día. Formación de tu equipo incluida.</p></div>
+    <div class="proc-step rv d4"><div class="proc-num">04</div><h3>Soporte</h3><p>Seguimiento 3 meses. Ajustes, optimización y nuevas oportunidades según resultados.</p></div>
+  </div>
+</div>
+
+<!-- CASOS DE ÉXITO -->
+<div class="sec" id="casos" style="padding-top:0">
+  <div class="eyebrow rv">Casos de Éxito</div>
+  <h2 class="sec-h2 rv d1">Resultados<br><span class="gt">reales y medibles</span></h2>
+  <div class="cases-grid">
+    <div class="case-card rv d1">
+      <div class="case-badge">Peluquería · Madrid</div>
+      <h3>Salon Marta</h3>
+      <p class="case-quote">"Las citas se gestionan solas y el WhatsApp automático me ha cambiado la vida."</p>
+      <div class="case-stats">
+        <div><div class="case-stat-val">+42%</div><div class="case-stat-lbl">Fidelización</div></div>
+        <div><div class="case-stat-val">−85%</div><div class="case-stat-lbl">Tiempo admin</div></div>
+        <div><div class="case-stat-val">+28%</div><div class="case-stat-lbl">Ingresos</div></div>
+      </div>
+    </div>
+    <div class="case-card rv d2">
+      <div class="case-badge">Barbería · Valencia</div>
+      <h3>The Barber Club</h3>
+      <p class="case-quote">"El asistente IA responde a clientes 24/7. Reservas fuera de horario se dispararon."</p>
+      <div class="case-stats">
+        <div><div class="case-stat-val">+67%</div><div class="case-stat-lbl">Reservas online</div></div>
+        <div><div class="case-stat-val">4.9★</div><div class="case-stat-lbl">Rating Google</div></div>
+        <div><div class="case-stat-val">+34%</div><div class="case-stat-lbl">Clientes nuevos</div></div>
+      </div>
+    </div>
+    <div class="case-card rv d3">
+      <div class="case-badge">Cadena · Barcelona</div>
+      <h3>Estudio Hélix</h3>
+      <p class="case-quote">"Analytics predictivo nos dijo qué servicios impulsar. Resultado inmediato."</p>
+      <div class="case-stats">
+        <div><div class="case-stat-val">3.2x</div><div class="case-stat-lbl">ROI en 6 meses</div></div>
+        <div><div class="case-stat-val">+51%</div><div class="case-stat-lbl">Ticket medio</div></div>
+        <div><div class="case-stat-val">5/5</div><div class="case-stat-lbl">Locales activos</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIOS -->
+<div class="sec" id="testimonios" style="padding-top:0">
+  <div class="eyebrow rv">Testimonios</div>
+  <h2 class="sec-h2 rv d1">Lo que dicen<br><span class="gt">mis clientes</span></h2>
+  <div class="test-grid">
+    <div class="test-card rv d1"><div class="test-stars">★★★★★</div><p>"Llevaba años queriendo digitalizar mi salón y siempre me perdía. Con José fue directo al grano: lo que funciona, cómo implementarlo y resultados visibles en 2 semanas."</p><div class="test-author"><div class="test-avatar">MG</div><div><strong>María García</strong><span>Peluquería García · Madrid</span></div></div></div>
+    <div class="test-card rv d2"><div class="test-stars">★★★★★</div><p>"El curso online es oro puro. Te lleva de la mano desde 0 y sin tecnicismos. He automatizado el marketing de mi barbería en un mes."</p><div class="test-author"><div class="test-avatar">CR</div><div><strong>Carlos Ruiz</strong><span>Barber Studio · Sevilla</span></div></div></div>
+    <div class="test-card rv d3"><div class="test-stars">★★★★★</div><p>"Lo mejor: entiende el negocio de verdad porque es peluquero. No es un consultor genérico, habla nuestro idioma. Recomendado 100%."</p><div class="test-author"><div class="test-avatar">LF</div><div><strong>Laura Fernández</strong><span>Salón Laura · Bilbao</span></div></div></div>
+  </div>
+</div>
+
+<!-- NEWSLETTER / LEAD MAGNET -->
+<div class="sec">
+  <div class="lead-wrap rv">
+    <div class="lead-orb"></div>
+    <div>
+      <div class="lead-tag">🎁 Gratis</div>
+      <h2 class="lead-h2">Guía gratuita:<br><span class="gt">7 herramientas IA</span> para peluquerías</h2>
+      <p class="lead-p">PDF descargable con las 7 herramientas que uso en mi propio salón. Cero spam, solo contenido útil.</p>
+    </div>
+    <form class="lead-form" id="leadForm">
+      <input type="email" class="fc" name="email" placeholder="tu@email.com" required>
+      <button type="submit" class="btn-grad" style="justify-content:center">Descargar guía gratis</button>
+      <p style="font-size:11px;color:var(--muted);text-align:center">Al suscribirte aceptas recibir emails ocasionales. Cancela cuando quieras.</p>
+    </form>
+    <div class="form-ok" id="okLead" style="grid-column:1/-1">✓ ¡Revisa tu email! Te he enviado la guía.</div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="sec" id="faq" style="padding-top:0">
+  <div class="eyebrow rv">Preguntas Frecuentes</div>
+  <h2 class="sec-h2 rv d1">Resolvemos tus<br><span class="gt">dudas</span></h2>
+  <div class="faq-list">
+    <details class="faq-item rv d1"><summary>¿Necesito conocimientos técnicos para aplicar IA en mi peluquería?<span class="faq-plus">+</span></summary><p>Para nada. Todas las herramientas que recomiendo están pensadas para ser usadas sin conocimientos técnicos. Yo mismo las uso a diario y te acompaño en todo el proceso.</p></details>
+    <details class="faq-item rv d1"><summary>¿Cuánto cuesta implementar IA en mi negocio?<span class="faq-plus">+</span></summary><p>Depende del alcance. La auditoría desde 250€. Implementaciones completas desde 750€. Muchas herramientas IA tienen planes gratuitos perfectos para empezar.</p></details>
+    <details class="faq-item rv d2"><summary>¿En cuánto tiempo veo resultados?<span class="faq-plus">+</span></summary><p>Las primeras mejoras (automatización de tareas, respuestas automáticas) son inmediatas. Impacto en ingresos y fidelización: entre 4 y 12 semanas según el caso.</p></details>
+    <details class="faq-item rv d2"><summary>¿El curso online sirve si ya he probado ChatGPT?<span class="faq-plus">+</span></summary><p>Sí. El curso va mucho más allá de ChatGPT básico: automatizaciones, marketing con IA, asistentes personalizados, analytics predictivo y casos reales.</p></details>
+    <details class="faq-item rv d3"><summary>¿Ofrecen soporte después de la implementación?<span class="faq-plus">+</span></summary><p>Sí, 3 meses de soporte incluido en toda implementación. Después tienes planes mensuales de acompañamiento.</p></details>
+    <details class="faq-item rv d3"><summary>¿Trabajáis con peluquerías fuera de España?<span class="faq-plus">+</span></summary><p>Trabajo en remoto con clientes de toda Hispanoamérica. Las llamadas se adaptan a tu zona horaria.</p></details>
+  </div>
+</div>
+
+<!-- CREDENCIALES -->
+<div class="sec">
+  <div class="eyebrow rv">Credenciales</div>
+  <h2 class="sec-h2 rv d1">Experiencia que<br><span class="gt">respalda resultados</span></h2>
+  <div class="cred-grid">
+    <div class="cred-card rv d1"><div class="cred-icon">🎓</div><div class="cred-lbl">Máster en IA</div><h3 class="cred-title">Microsoft / FounderZ</h3><p class="cred-sub">Formación certificada</p><p class="cred-desc">Formación especializada en IA aplicada a negocios. Enfoque 100% práctico.</p><div class="cred-tags"><span class="cred-tag">Machine Learning</span><span class="cred-tag">NLP</span><span class="cred-tag">Automatización</span><span class="cred-tag">ChatGPT</span><span class="cred-tag">Prompting</span></div></div>
+    <div class="cred-card rv d2"><div class="cred-icon">✂️</div><div class="cred-lbl">30 Años de Experiencia</div><h3 class="cred-title">Peluquero Profesional</h3><p class="cred-sub">Trayectoria demostrada</p><p class="cred-desc">Tres décadas gestionando mi propio salón. Conozco cada desafío del negocio.</p><ul class="cred-list"><li>Gestión de equipo y clientes</li><li>Marketing y fidelización</li><li>Optimización de procesos</li><li>Análisis financiero</li></ul></div>
+  </div>
+  <div class="cred-banner rv"><strong>La combinación perfecta: experiencia + tecnología.</strong> No solo sé cómo funciona la IA, sino que entiendo perfectamente los desafíos diarios de tu peluquería.</div>
+</div>
+
+<!-- CONTACTO -->
+<div class="sec" id="contacto">
+  <div class="eyebrow rv">Contacto</div>
+  <h2 class="sec-h2 rv d1">Hablemos de<br><span class="gt">tu proyecto</span></h2>
+
+  <div class="ct-tabs rv">
+    <button class="ct-tab active" onclick="switchTab('mensaje')">💬 Enviar Mensaje</button>
+    <button class="ct-tab" onclick="switchTab('auditoria')">📅 Solicitar Auditoría</button>
+  </div>
+
+  <!-- Panel: Mensaje -->
+  <div class="ct-panel active" id="panel-mensaje">
+    <div class="rv-l">
+      <div class="ci-block"><div class="ci-lbl">Email</div><div class="ci-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="066e696a67466c69756375736774637c28676f">[email&#160;protected]</a></div><div class="ci-sub">Respuesta en menos de 24 horas</div></div>
+      <div class="ci-box"><h4>¿Qué incluye la consulta inicial?</h4><ul><li>Análisis preliminar de tu negocio</li><li>Identificación de oportunidades</li><li>Propuesta personalizada sin compromiso</li></ul></div>
+    </div>
+    <div>
+      <form id="formMensaje">
+        <div class="fg"><label class="fl">Nombre *</label><input type="text" class="fc" name="nombre" placeholder="Tu nombre completo" required></div>
+        <div class="form-row">
+          <div class="fg"><label class="fl">Email *</label><input type="email" class="fc" name="email" placeholder="tu@email.com" required></div>
+          <div class="fg"><label class="fl">Teléfono *</label><input type="tel" class="fc" name="telefono" placeholder="+34 600 000 000" required></div>
+        </div>
+        <div class="fg"><label class="fl">Mensaje *</label><textarea class="fc" name="mensaje" placeholder="Cuéntame sobre tu peluquería..." required></textarea></div>
+        <button type="submit" class="btn-sub">Enviar mensaje →</button>
+      </form>
+      <div class="form-ok" id="okMensaje">✓ ¡Mensaje enviado! Te respondo en menos de 24 horas.</div>
+    </div>
+  </div>
+
+  <!-- Panel: Auditoría -->
+  <div class="ct-panel" id="panel-auditoria">
+    <div class="rv-l">
+      <div class="ci-block"><div class="ci-lbl">Auditoría IA</div><div class="ci-val">Desde 250€</div><div class="ci-sub">Análisis completo + hoja de ruta</div></div>
+      <div class="ci-box"><h4>¿Qué incluye la auditoría?</h4><ul><li>Análisis completo de tus procesos actuales</li><li>Identificación de oportunidades de IA</li><li>Hoja de ruta personalizada</li><li>ROI proyectado de las mejoras</li><li>Llamada de 60 min en la fecha elegida</li></ul></div>
+    </div>
+    <div>
+      <form id="formAuditoria">
+        <div class="fg"><label class="fl">Nombre *</label><input type="text" class="fc" name="nombre" placeholder="Tu nombre completo" required></div>
+        <div class="form-row">
+          <div class="fg"><label class="fl">Email *</label><input type="email" class="fc" name="email" placeholder="tu@email.com" required></div>
+          <div class="fg"><label class="fl">Teléfono *</label><input type="tel" class="fc" name="telefono" placeholder="+34 600 000 000" required></div>
+        </div>
+        <div class="form-row">
+          <div class="fg"><label class="fl">Fecha preferida *</label><input type="date" class="fc" name="fecha" required></div>
+          <div class="fg"><label class="fl">Hora preferida *</label><input type="time" class="fc" name="hora" required></div>
+        </div>
+        <div class="fg"><label class="fl">Nombre de tu peluquería</label><input type="text" class="fc" name="salon" placeholder="Ej: Peluquería García"></div>
+        <div class="fg"><label class="fl">¿Qué quieres mejorar? *</label><textarea class="fc" name="mensaje" placeholder="Cuéntame brevemente qué áreas te gustaría optimizar con IA..." required></textarea></div>
+        <button type="submit" class="btn-sub">Solicitar Auditoría →</button>
+      </form>
+      <div class="form-ok" id="okAuditoria">✓ ¡Auditoría solicitada! Confirmaré la fecha en menos de 24 horas.</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>© 2026 José Suárez — Consultor IA. Todos los derechos reservados.</span>
+  <div style="display:flex;align-items:center;gap:16px">
+    <a href="/cdn-cgi/l/email-protection#7a1215161b3a1015091f090f1b081f00541b13"><span class="__cf_email__" data-cfemail="11797e7d70517b7e627462647063746b3f7078">[email&#160;protected]</span></a>
+    <a href="admin.html" class="footer-admin">🔐 Panel Admin</a>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// MARQUEE
+const mtrack = document.getElementById('mtrack');
+['Inteligencia Artificial','Transformación Digital','Consultoría IA','Automatización','Formación Práctica','Peluquería del Futuro','ChatGPT Avanzado','Microsoft FounderZ'].flatMap(i=>[i,i]).forEach(i=>{
+  mtrack.innerHTML+=`<div class="mq-item"><span class="mq-dot">·</span>${i}</div>`;
+});
+
+// MINI BARS
+const mb = document.getElementById('miniBars');
+[40,65,45,80,55,90,70].forEach(h=>{
+  mb.innerHTML+=`<div class="mb" style="height:${h}%"></div>`;
+});
+// CALENDAR DOTS
+const cal = document.getElementById('ocCal');
+for(let i=0;i<21;i++){
+  const dot=document.createElement('div');
+  dot.className='oc-cal-dot'+(i===4||i===9||i===14?' filled':i===6||i===18?' grad':'');
+  cal.appendChild(dot);
+}
+
+// PROGRESS BAR + BTT
+window.addEventListener('scroll',()=>{
+  document.getElementById('prog').style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%';
+  document.getElementById('btt').classList.toggle('show',window.scrollY>500);
+},{passive:true});
+document.getElementById('btt').addEventListener('click',e=>{e.preventDefault();window.scrollTo({top:0,behavior:'smooth'});});
+
+// HERO ANIMS
+window.addEventListener('load',()=>{
+  const E='cubic-bezier(0.16,1,0.3,1)';
+  setTimeout(()=>{const el=document.getElementById('hChip');el.style.transition=`opacity .6s,transform .6s ${E}`;el.style.opacity='1';},200);
+  [['hl1',.35],['hl2',.52],['hl3',.68]].forEach(([id,d])=>{
+    setTimeout(()=>{const el=document.getElementById(id);el.style.transition=`transform .85s ${E}`;el.style.transform='translateY(0)';},d*1000);
+  });
+  setTimeout(()=>{document.getElementById('hSub').style.transition=`opacity .7s ${E}`;document.getElementById('hSub').style.opacity='1';},820);
+  setTimeout(()=>{document.getElementById('hBtns').style.transition=`opacity .7s ${E}`;document.getElementById('hBtns').style.opacity='1';},970);
+  setTimeout(()=>{
+    document.getElementById('hStats').style.transition=`opacity .7s ${E}`;document.getElementById('hStats').style.opacity='1';
+    document.querySelectorAll('[data-count]').forEach(c=>{
+      const target=+c.dataset.count;let v=0;
+      const t=setInterval(()=>{v+=target/60;if(v>=target){c.textContent=target+'+';clearInterval(t);}else c.textContent=Math.floor(v)+'+';},16);
+    });
+  },1150);
+  document.getElementById('hPhoto').classList.add('in');
+});
+
+// ═══ SCROLL STORY — CLEAN 3D ASSEMBLY ═══
+const outer  = document.getElementById('storyOuter');
+const ambs   = [document.getElementById('sa1'),document.getElementById('sa2'),document.getElementById('sa3'),document.getElementById('sa4')];
+const chaps  = [document.getElementById('sch0'),document.getElementById('sch1'),document.getElementById('sch2'),document.getElementById('sch3')];
+const dots   = document.querySelectorAll('.s-dot');
+const hint   = document.getElementById('sHint');
+
+// 3D cards data: [startX, startY, startZ, startRX, startRY, endTX, endTY, endTZ, endRX, endRY]
+const cards = [
+  {el: document.getElementById('oc1'), sx:-280, sy:-200, sz:180,  srx: 50, sry:-60, ex:0,   ey:0,   ez:60,  erx: 5, ery:-8},
+  {el: document.getElementById('oc2'), sx: 300, sy: 180, sz:-120, srx:-40, sry: 70, ex:-20,  ey:20,  ez:20,  erx:-3, ery: 5},
+  {el: document.getElementById('oc3'), sx:-200, sy: 280, sz: 80,  srx: 60, sry:-50, ex:-40,  ey:40,  ez:-20, erx: 2, ery:-3},
+  {el: document.getElementById('oc4'), sx: 180, sy:-260, sz:-200, srx:-50, sry: 40, ex:-55,  ey:55,  ez:-60, erx: 0, ery: 4},
+];
+// opacity delays per card (0-1 normalized)
+const opDelays = [0, 0.15, 0.28, 0.4];
+
+function lerp(a,b,t){return a+(b-a)*t}
+function clamp(v,lo,hi){return Math.max(lo,Math.min(hi,v))}
+function easeInOut(t){return t<.5?2*t*t:(1-Math.pow(-2*t+2,2)/2)}
+function easeOut(t){return 1-Math.pow(1-t,3)}
+
+let lastChap=-1;
+
+function updateStory(){
+  const rect=outer.getBoundingClientRect();
+  const maxS=outer.offsetHeight-window.innerHeight;
+  const scrolled=-rect.top;
+  const p=clamp(scrolled/maxS,0,1); // 0→1 full story
+
+  hint.style.opacity=scrolled>100?'0':'1';
+
+  // 3D Assembly: driven by FULL story progress
+  const assembleP=easeOut(p);
+  cards.forEach((c,i)=>{
+    const od=opDelays[i];
+    const op=clamp((p-od)/(.85-od),0,1);
+    const e=easeOut(op);
+    const tx=lerp(c.sx,c.ex,e);
+    const ty=lerp(c.sy,c.ey,e);
+    const tz=lerp(c.sz,c.ez,e);
+    const rx=lerp(c.srx,c.erx,e);
+    const ry=lerp(c.sry,c.ery,e);
+    const opacity=clamp((p*4-opDelays[i]*2),0,1);
+    c.el.style.transform=`translate3d(${tx}px,${ty}px,${tz}px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+    c.el.style.opacity=opacity;
+  });
+
+  // Chapters & ambient: 4 equal segments
+  const idx=Math.min(3,Math.floor(p*4));
+  const sub=clamp((p*4)-idx,0,1);
+
+  // Ambient layers crossfade
+  ambs.forEach((a,i)=>{
+    if(i<idx) a.style.opacity='0';
+    else if(i===idx) a.style.opacity=sub>.75?1-(sub-.75)*4:1;
+    else if(i===idx+1) a.style.opacity=sub>.75?(sub-.75)*4:0;
+    else a.style.opacity='0';
+  });
+
+  // Chapter text transitions
+  chaps.forEach((ch,i)=>{
+    ch.classList.remove('vis','out');
+    if(i===idx){
+      if(sub>.82) ch.classList.add('vis','out');
+      else ch.classList.add('vis');
+    } else if(i===idx+1 && sub>.82){
+      ch.classList.add('vis');
+    }
+  });
+
+  if(idx!==lastChap){
+    dots.forEach((d,i)=>d.classList.toggle('on',i===idx));
+    lastChap=idx;
+  }
+}
+
+// rAF-based scroll handling for 60fps
+let _storyTick=false,_cachedMax=0,_cachedTop=0;
+function recalc(){_cachedTop=outer.offsetTop;_cachedMax=outer.offsetHeight-window.innerHeight;}
+recalc();
+window.addEventListener('resize',recalc);
+
+function updateStoryRaf(){
+  const scrolled=window.scrollY-_cachedTop;
+  const p=clamp(scrolled/_cachedMax,0,1);
+
+  hint.style.opacity=scrolled>100?'0':'1';
+
+  // 3D assembly
+  for(let i=0;i<cards.length;i++){
+    const c=cards[i];
+    const od=opDelays[i];
+    const op=clamp((p-od)/(.85-od),0,1);
+    const e=op<.5?2*op*op:(1-Math.pow(-2*op+2,2)/2); // easeInOut
+    const tx=c.sx+(c.ex-c.sx)*e;
+    const ty=c.sy+(c.ey-c.sy)*e;
+    const tz=c.sz+(c.ez-c.sz)*e;
+    const rx=c.srx+(c.erx-c.srx)*e;
+    const ry=c.sry+(c.ery-c.sry)*e;
+    const opacity=clamp((p*4-od*2),0,1);
+    c.el.style.transform=`translate3d(${tx.toFixed(1)}px,${ty.toFixed(1)}px,${tz.toFixed(1)}px) rotateX(${rx.toFixed(1)}deg) rotateY(${ry.toFixed(1)}deg)`;
+    c.el.style.opacity=opacity.toFixed(3);
+  }
+
+  const idx=Math.min(3,Math.floor(p*4));
+  const sub=clamp((p*4)-idx,0,1);
+
+  for(let i=0;i<ambs.length;i++){
+    const a=ambs[i];
+    let op=0;
+    if(i===idx) op=sub>.75?1-(sub-.75)*4:1;
+    else if(i===idx+1) op=sub>.75?(sub-.75)*4:0;
+    a.style.opacity=op;
+  }
+
+  for(let i=0;i<chaps.length;i++){
+    const ch=chaps[i];
+    let classes='s-chapter';
+    if(i===idx){
+      classes+=sub>.82?' vis out':' vis';
+    } else if(i===idx+1 && sub>.82){
+      classes+=' vis';
+    }
+    if(ch.className!==classes) ch.className=classes;
+  }
+
+  if(idx!==lastChap){
+    dots.forEach((d,i)=>d.classList.toggle('on',i===idx));
+    lastChap=idx;
+  }
+  _storyTick=false;
+}
+function updateStory(){
+  if(!_storyTick){requestAnimationFrame(updateStoryRaf);_storyTick=true;}
+}
+updateStory();
+window.addEventListener('scroll',updateStory,{passive:true});
+
+// Dot click
+document.querySelectorAll('.s-dot').forEach(d=>{
+  d.addEventListener('click',()=>{
+    const i=+d.dataset.i;
+    const top=outer.offsetTop+(outer.offsetHeight-window.innerHeight)*(i/4+.01);
+    window.scrollTo({top,behavior:'smooth'});
+  });
+});
+
+// REVEAL OBSERVER
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+},{threshold:.1,rootMargin:'0px 0px -50px 0px'});
+document.querySelectorAll('.rv,.rv-l,.rv-r').forEach(el=>io.observe(el));
+
+// CONTACT TABS
+function switchTab(tab){
+  document.querySelectorAll('.ct-tab').forEach((t,i)=>t.classList.toggle('active',['mensaje','auditoria'][i]===tab));
+  document.querySelectorAll('.ct-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+tab).classList.add('active');
+}
+
+// SAVE TO LOCALSTORAGE
+function saveContact(data){
+  const arr=JSON.parse(localStorage.getItem('js_contacts')||'[]');
+  arr.unshift({id:Date.now(),type:'mensaje',...data,date:new Date().toISOString(),status:'nuevo'});
+  localStorage.setItem('js_contacts',JSON.stringify(arr));
+}
+function saveAudit(data){
+  const arr=JSON.parse(localStorage.getItem('js_audits')||'[]');
+  arr.unshift({id:Date.now(),type:'auditoria',...data,date:new Date().toISOString(),status:'pendiente'});
+  localStorage.setItem('js_audits',JSON.stringify(arr));
+}
+
+document.getElementById('formMensaje').addEventListener('submit',function(e){
+  e.preventDefault();
+  const fd=new FormData(this);
+  saveContact(Object.fromEntries(fd));
+  this.style.display='none';
+  document.getElementById('okMensaje').style.display='block';
+});
+const leadForm=document.getElementById('leadForm');
+if(leadForm){leadForm.addEventListener('submit',function(e){
+  e.preventDefault();
+  const fd=new FormData(this);
+  const arr=JSON.parse(localStorage.getItem('js_contacts')||'[]');
+  arr.unshift({id:Date.now(),type:'lead',nombre:'Suscripción Newsletter',email:fd.get('email'),telefono:'',mensaje:'Solicitó guía gratuita: 7 herramientas IA',date:new Date().toISOString(),status:'nuevo'});
+  localStorage.setItem('js_contacts',JSON.stringify(arr));
+  this.style.display='none';
+  document.getElementById('okLead').style.display='block';
+});}
+
+document.getElementById('formAuditoria').addEventListener('submit',function(e){
+  e.preventDefault();
+  const fd=new FormData(this);
+  saveAudit(Object.fromEntries(fd));
+  this.style.display='none';
+  document.getElementById('okAuditoria').style.display='block';
+});
+
+// ── REAL ANALYTICS TRACKING ──
+(function trackVisit(){
+  const visits=JSON.parse(localStorage.getItem('js_visits')||'[]');
+  const sessionId=sessionStorage.getItem('js_session');
+  if(!sessionId){
+    // New session — record visit
+    const newId=Date.now()+'_'+Math.random().toString(36).slice(2,8);
+    sessionStorage.setItem('js_session',newId);
+    let src='Directo';
+    if(document.referrer){
+      const r=document.referrer.toLowerCase();
+      if(r.includes('google')||r.includes('bing')||r.includes('duckduckgo')) src='Orgánico';
+      else if(r.includes('instagram')||r.includes('facebook')||r.includes('twitter')||r.includes('linkedin')||r.includes('tiktok')) src='Redes Sociales';
+      else src='Referido';
+    }
+    const device=window.innerWidth<768?'Móvil':window.innerWidth<1100?'Tablet':'Desktop';
+    visits.push({date:new Date().toISOString(),session:newId,src,device,page:'home'});
+    if(visits.length>1000) visits.splice(0,visits.length-1000);
+    localStorage.setItem('js_visits',JSON.stringify(visits));
+  }
+  // Track page view regardless
+  const pageViews=JSON.parse(localStorage.getItem('js_pageviews')||'[]');
+  pageViews.push({date:new Date().toISOString(),page:location.hash||'home'});
+  if(pageViews.length>2000) pageViews.splice(0,pageViews.length-2000);
+  localStorage.setItem('js_pageviews',JSON.stringify(pageViews));
+})();
+
+// Seed demo data on first visit
+if(!localStorage.getItem('js_seeded')){
+  localStorage.setItem('js_seeded','1');
+  const now=new Date();
+  const contacts=[
+    {id:1,type:'mensaje',nombre:'María García',email:'maria@peluqueria.es',telefono:'612345678',mensaje:'Me interesa saber más sobre vuestros servicios de IA para mi salón.',date:new Date(now-86400000*1).toISOString(),status:'nuevo'},
+    {id:2,type:'mensaje',nombre:'Carlos Martínez',email:'carlos@salon.com',telefono:'634567890',mensaje:'Tengo una peluquería de 5 empleados y quiero automatizar la agenda.',date:new Date(now-86400000*2).toISOString(),status:'respondido'},
+    {id:3,type:'mensaje',nombre:'Ana López',email:'ana@hair.es',telefono:'645678901',mensaje:'Quiero saber el precio de la auditoría.',date:new Date(now-86400000*3).toISOString(),status:'nuevo'},
+    {id:4,type:'mensaje',nombre:'Pedro Sánchez',email:'pedro@barberia.es',telefono:'656789012',mensaje:'Necesito ayuda con marketing en redes sociales usando IA.',date:new Date(now-86400000*5).toISOString(),status:'respondido'},
+    {id:5,type:'mensaje',nombre:'Laura Fernández',email:'laura@peluquerias.com',telefono:'667890123',mensaje:'Me gustaría recibir más información sobre el curso online.',date:new Date(now-86400000*7).toISOString(),status:'archivado'},
+  ];
+  const d1=new Date(now);d1.setDate(d1.getDate()+2);d1.setHours(10,0);
+  const d2=new Date(now);d2.setDate(d2.getDate()+4);d2.setHours(12,0);
+  const d3=new Date(now);d3.setDate(d3.getDate()+7);d3.setHours(16,30);
+  const d4=new Date(now);d4.setDate(d4.getDate()-3);d4.setHours(11,0);
+  const audits=[
+    {id:10,type:'auditoria',nombre:'María García',email:'maria@peluqueria.es',telefono:'612345678',salon:'Peluquería María',fecha:d1.toISOString().split('T')[0],hora:'10:00',mensaje:'Quiero optimizar la gestión de citas y fidelización.',date:new Date(now-86400000).toISOString(),status:'pendiente'},
+    {id:11,type:'auditoria',nombre:'Roberto Díaz',email:'roberto@cortes.es',telefono:'678901234',salon:'Barber Studio RD',fecha:d2.toISOString().split('T')[0],hora:'12:00',mensaje:'Me interesa la automatización del marketing.',date:new Date(now-86400000*2).toISOString(),status:'confirmada'},
+    {id:12,type:'auditoria',nombre:'Sofía Ruiz',email:'sofia@belleza.com',telefono:'689012345',salon:'Salón Belleza Total',fecha:d3.toISOString().split('T')[0],hora:'16:30',mensaje:'Quiero digitalizar todo mi negocio.',date:new Date(now-86400000*3).toISOString(),status:'pendiente'},
+    {id:13,type:'auditoria',nombre:'Miguel Torres',email:'miguel@barberia.es',telefono:'690123456',salon:'La Barbería Clásica',fecha:d4.toISOString().split('T')[0],hora:'11:00',mensaje:'Revisión de procesos internos.',date:new Date(now-86400000*6).toISOString(),status:'completada'},
+  ];
+  localStorage.setItem('js_contacts',JSON.stringify(contacts));
+  localStorage.setItem('js_audits',JSON.stringify(audits));
+  // Seed 30 days of visits
+  const seedVisits=[];
+  const sources=['Orgánico','Directo','Redes Sociales','Referido'];
+  const devices=['Desktop','Móvil','Tablet'];
+  for(let i=29;i>=0;i--){
+    const dayVisits=Math.floor(Math.random()*50)+20;
+    for(let j=0;j<dayVisits;j++){
+      const d=new Date();d.setDate(d.getDate()-i);d.setHours(Math.floor(Math.random()*24),Math.floor(Math.random()*60));
+      seedVisits.push({date:d.toISOString(),session:'seed_'+i+'_'+j,src:sources[Math.floor(Math.random()*4)],device:devices[Math.floor(Math.random()*3)],page:'home'});
+    }
+  }
+  localStorage.setItem('js_visits',JSON.stringify(seedVisits));
+}
+</script>
+</body>
+</html>

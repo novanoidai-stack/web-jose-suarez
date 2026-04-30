@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<style data-omelette-injected>html,body{background:transparent}</style><script data-omelette-injected>(()=>{var $=["https://claude.ai","https://preview.claude.ai","https://eap-omelette.claude.ai"];var F=30000;var A=3000;document.addEventListener("DOMContentLoaded",()=>{const Q="transform-react-jsx-source";document.querySelectorAll('script[type="text/babel"],script[type="text/jsx"]').forEach((J,V)=>{const X=J.getAttribute("data-plugins")||"";if(X.indexOf(Q)<0){J.setAttribute("data-plugins",X?`${X},${Q}`:Q)}if(!J.hasAttribute("data-filename")){J.setAttribute("data-filename",J.getAttribute("src")||`inline-${V}`)}})});var W=window.parent;if(W&&W!==window){const Q=(z,k)=>{try{W.postMessage({__omelette_log:true,type:z,data:k},"*")}catch{}};["log","warn","error"].forEach((z)=>{const k=console[z];console[z]=(...C)=>{const D=C.map((w)=>{try{return typeof w==="object"?JSON.stringify(w):String(w)}catch{try{return String(w)}catch{return"[unstringifiable]"}}}).join(" ");Q(z,D);k.apply(console,C)}});window.addEventListener("error",(z)=>{const k=z.target;if(k&&k!==window&&k.tagName){const C=k.src||k.href||"";Q("resource_error",`${k.tagName} failed to load: ${C}`)}else{Q("error",`${z.message||"Unknown error"} at ${z.filename||"?"}:${z.lineno||0}:${z.colno||0}`)}},true);window.addEventListener("unhandledrejection",(z)=>{const k=z.reason;const C=k instanceof Error?`${k.message} ${k.stack}`:String(k);Q("error",`Unhandled rejection: ${C}`)});const J=()=>{try{W.postMessage({type:"omelette:height",height:document.documentElement.scrollHeight},"*")}catch{}};if(document.readyState==="complete")J();else window.addEventListener("load",J);if(window.ResizeObserver)new ResizeObserver(J).observe(document.documentElement);const V={};let X=0;window.claude={complete(z){return new Promise((k,C)=>{if(!$.length){C(new Error("claude.complete: no parent origin"));return}const D=`c${++X}`;const w=()=>setTimeout(()=>{delete V[D];C(new Error(`claude.complete: no data for ${F/1000}s`))},F);const K=w();V[D]={resolve:k,reject:C,text:"",t:K,arm:w};try{for(const Z of $){W.postMessage({__om_api:true,id:D,body:z},Z)}}catch(Z){clearTimeout(K);delete V[D];C(Z)}})}};const Y={};let h=0;window.omelette={writeFile:(z,k)=>new Promise((C,D)=>{if(!$.length){C();return}const w=`f${++h}`;const K=setTimeout(()=>{delete Y[w];C()},A);Y[w]={resolve:C,reject:D,t:K};try{for(const Z of $){W.postMessage({__om_file:true,id:w,op:"write",path:z,content:k},Z)}}catch{clearTimeout(K);delete Y[w];C()}})};const b=(z)=>{try{return JSON.stringify(z)}catch{return JSON.stringify(String(z))}};window.addEventListener("message",(z)=>{if($.indexOf(z.origin)<0)return;if(z.source!==W)return;const k=z.data;if(!k)return;if(k.__om_file_r){const w=Y[k.id];if(!w)return;clearTimeout(w.t);delete Y[k.id];if(k.ok)w.resolve();else w.reject(new Error(k.error||"write failed"));return}if(k.__om_api_r){const w=V[k.id];if(!w)return;if(k.error!=null){clearTimeout(w.t);delete V[k.id];w.reject(new Error(k.error));return}if(k.chunk!=null){clearTimeout(w.t);w.t=w.arm();w.text+=k.chunk;return}if(k.done){clearTimeout(w.t);delete V[k.id];w.resolve(k.text!=null?k.text:w.text);return}return}if(!k.__om_eval)return;const C=k;const D=(w)=>{z.source.postMessage({...w,__om_eval_r:1,id:C.id},z.origin)};try{const w=(0,eval)(C.code);if(w&&typeof w.then==="function"){w.then((K)=>D({ok:1,v:b(K)}),(K)=>D({ok:0,e:String(K)}))}else{D({ok:1,v:b(w)})}}catch(w){D({ok:0,e:String(w)})}})}})();
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — José Suárez IA</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#070710;--s1:#0d0d1f;--s2:#13132b;--s3:#191935;
+  --indigo:#6366f1;--violet:#8b5cf6;--purple:#a855f7;
+  --grad:linear-gradient(135deg,#6366f1,#8b5cf6,#a855f7);
+  --text:#eeeeff;--muted:#6e6e9a;--border:rgba(99,102,241,0.15);
+  --green:#22c55e;--yellow:#eab308;--red:#ef4444;
+  --r:12px;--r-lg:20px;
+  --sidebar:240px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;display:flex;min-height:100vh;-webkit-font-smoothing:antialiased}
+.gt{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  width:var(--sidebar);flex-shrink:0;
+  background:var(--s1);
+  border-right:1px solid var(--border);
+  position:fixed;top:0;left:0;bottom:0;
+  display:flex;flex-direction:column;
+  padding:24px 0;z-index:50;
+  overflow-y:auto;
+}
+.sb-logo{
+  display:flex;align-items:center;gap:10px;
+  padding:0 20px 24px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:12px;
+}
+.sb-logo img{width:36px;height:36px;border-radius:50%;border:2px solid transparent;background:linear-gradient(var(--s1),var(--s1)) padding-box,var(--grad) border-box}
+.sb-logo-text{font-family:'Bricolage Grotesque',sans-serif;font-size:15px;font-weight:700}
+.sb-logo-sub{font-size:10px;color:var(--muted);margin-top:1px}
+.sb-section{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:12px 20px 8px;margin-top:8px}
+.sb-nav{list-style:none}
+.sb-nav li a{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 20px;
+  color:var(--muted);text-decoration:none;
+  font-size:13px;font-weight:500;
+  border-radius:0;
+  transition:all .2s;
+  border-left:2px solid transparent;
+  cursor:pointer;
+}
+.sb-nav li a:hover{color:var(--text);background:rgba(99,102,241,.06)}
+.sb-nav li a.active{color:var(--text);background:rgba(99,102,241,.1);border-left-color:var(--indigo)}
+.sb-icon{width:18px;height:18px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px}
+.sb-badge{margin-left:auto;background:var(--indigo);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px}
+.sb-footer{margin-top:auto;padding:16px 20px;border-top:1px solid var(--border)}
+.sb-user{display:flex;align-items:center;gap:10px}
+.sb-avatar{width:34px;height:34px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.sb-user-name{font-size:13px;font-weight:600}
+.sb-user-role{font-size:11px;color:var(--muted)}
+
+/* ── MAIN ── */
+.main{margin-left:var(--sidebar);flex:1;min-width:0;padding:0}
+
+/* ── TOPBAR ── */
+.topbar{
+  position:sticky;top:0;z-index:40;
+  background:rgba(7,7,16,.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:16px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.topbar-title{font-family:'Bricolage Grotesque',sans-serif;font-size:20px;font-weight:800}
+.topbar-sub{font-size:12px;color:var(--muted);margin-top:1px}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.tb-btn{
+  display:flex;align-items:center;gap:6px;
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:var(--r);padding:8px 14px;
+  font-size:12px;color:var(--muted);cursor:pointer;
+  transition:all .2s;text-decoration:none;font-family:'DM Sans',sans-serif;
+}
+.tb-btn:hover{border-color:rgba(99,102,241,.4);color:var(--text)}
+.notif-dot{width:6px;height:6px;background:var(--indigo);border-radius:50%;margin-left:auto}
+
+/* ── PAGE ── */
+.page{display:none;padding:32px}
+.page.active{display:block}
+
+/* ── STAT CARDS ── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.stat-card{
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:24px;
+  position:relative;overflow:hidden;
+  transition:transform .3s,border-color .3s;
+}
+.stat-card:hover{transform:translateY(-3px);border-color:rgba(99,102,241,.3)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad)}
+.stat-icon{width:40px;height:40px;border-radius:var(--r);background:rgba(99,102,241,.12);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:16px}
+.stat-val{font-family:'Bricolage Grotesque',sans-serif;font-size:32px;font-weight:800;line-height:1;margin-bottom:6px}
+.stat-lbl{font-size:12px;color:var(--muted)}
+.stat-change{font-size:11px;margin-top:8px;display:flex;align-items:center;gap:4px}
+.stat-change.up{color:var(--green)}.stat-change.down{color:var(--red)}
+
+/* ── CHART CARDS ── */
+.charts-row{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:28px}
+.chart-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px}
+.chart-card h3{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px}
+.chart-card .c-sub{font-size:12px;color:var(--muted);margin-bottom:20px}
+.chart-wrap{position:relative;height:200px}
+
+/* ── TABLES ── */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.section-header h3{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800}
+.tbl-wrap{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+table{width:100%;border-collapse:collapse}
+thead tr{border-bottom:1px solid var(--border)}
+thead th{text-align:left;padding:14px 20px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+tbody tr{border-bottom:1px solid rgba(99,102,241,.07);transition:background .2s;cursor:pointer}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(99,102,241,.05)}
+tbody td{padding:14px 20px;font-size:13px;vertical-align:middle}
+.td-name{font-weight:600}
+.td-email{color:var(--muted);font-size:12px}
+.td-date{color:var(--muted);font-size:12px}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:100px;font-size:11px;font-weight:600;letter-spacing:.04em}
+.badge::before{content:'';width:5px;height:5px;border-radius:50%}
+.badge-nuevo{background:rgba(99,102,241,.12);color:var(--indigo)}.badge-nuevo::before{background:var(--indigo)}
+.badge-respondido{background:rgba(34,197,94,.12);color:var(--green)}.badge-respondido::before{background:var(--green)}
+.badge-archivado{background:rgba(110,110,154,.1);color:var(--muted)}.badge-archivado::before{background:var(--muted)}
+.badge-pendiente{background:rgba(234,179,8,.12);color:var(--yellow)}.badge-pendiente::before{background:var(--yellow)}
+.badge-confirmada{background:rgba(99,102,241,.12);color:var(--indigo)}.badge-confirmada::before{background:var(--indigo)}
+.badge-completada{background:rgba(34,197,94,.12);color:var(--green)}.badge-completada::before{background:var(--green)}
+.badge-cancelada{background:rgba(239,68,68,.12);color:var(--red)}.badge-cancelada::before{background:var(--red)}
+
+/* ── SEARCH & FILTERS ── */
+.filters{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.search-box{
+  display:flex;align-items:center;gap:8px;
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:var(--r);padding:9px 14px;
+  flex:1;min-width:200px;
+}
+.search-box input{background:none;border:none;outline:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;width:100%}
+.search-box input::placeholder{color:var(--muted)}
+.filter-btn{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:9px 16px;font-size:12px;color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.filter-btn:hover,.filter-btn.active{border-color:var(--indigo);color:var(--indigo);background:rgba(99,102,241,.08)}
+
+/* ── DETAIL MODAL ── */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:100;display:none;align-items:center;justify-content:center;padding:24px}
+.modal-bg.open{display:flex}
+.modal{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);width:100%;max-width:560px;padding:36px;position:relative;max-height:90vh;overflow-y:auto}
+.modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;background:rgba(255,255,255,.06);border:none;border-radius:50%;color:var(--muted);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.modal-close:hover{background:rgba(255,255,255,.12);color:var(--text)}
+.modal-tag{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--indigo);margin-bottom:8px}
+.modal-name{font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:800;margin-bottom:20px}
+.modal-field{margin-bottom:16px}
+.modal-field-lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.modal-field-val{font-size:14px;color:var(--text);line-height:1.6}
+.modal-actions{display:flex;gap:10px;margin-top:24px;flex-wrap:wrap}
+.modal-btn{padding:10px 20px;border-radius:100px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;border:none}
+.modal-btn-primary{background:var(--grad);color:#fff}
+.modal-btn-secondary{background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--border)}
+.modal-btn-secondary:hover{border-color:rgba(99,102,241,.4);color:var(--text)}
+.modal-status-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.modal-status-opt{padding:6px 14px;border-radius:100px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:none;color:var(--muted);font-family:'DM Sans',sans-serif;transition:all .2s}
+.modal-status-opt:hover{border-color:var(--indigo);color:var(--indigo)}
+.modal-status-opt.sel{background:var(--indigo);border-color:var(--indigo);color:#fff}
+
+/* ── CALENDAR ── */
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.cal-nav{display:flex;align-items:center;gap:12px}
+.cal-nav button{width:32px;height:32px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r);color:var(--text);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.cal-nav button:hover{border-color:var(--indigo);color:var(--indigo)}
+.cal-month{font-family:'Bricolage Grotesque',sans-serif;font-size:18px;font-weight:800}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cal-day-header{text-align:center;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:8px 0}
+.cal-day{
+  aspect-ratio:1;border-radius:var(--r);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:13px;cursor:pointer;
+  transition:all .2s;position:relative;
+  padding:4px;
+}
+.cal-day:hover{background:rgba(99,102,241,.1)}
+.cal-day.other-month{color:rgba(110,110,154,.4)}
+.cal-day.today{background:rgba(99,102,241,.12);color:var(--indigo);font-weight:700}
+.cal-day.has-event::after{content:'';width:5px;height:5px;border-radius:50%;background:var(--grad);position:absolute;bottom:5px}
+.cal-day.has-event.today::after{background:var(--text)}
+.cal-audit-list{margin-top:24px;display:flex;flex-direction:column;gap:10px}
+.audit-item{
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:var(--r);padding:16px 20px;
+  display:flex;align-items:center;gap:16px;
+  transition:all .2s;cursor:pointer;
+}
+.audit-item:hover{border-color:rgba(99,102,241,.3);background:rgba(99,102,241,.05)}
+.audit-date-box{
+  min-width:56px;text-align:center;
+  background:rgba(99,102,241,.1);border:1px solid var(--border);
+  border-radius:var(--r);padding:8px;
+}
+.audit-date-day{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;font-weight:800;line-height:1;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.audit-date-mon{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.audit-info{flex:1}
+.audit-name{font-weight:600;font-size:14px;margin-bottom:2px}
+.audit-salon{font-size:12px;color:var(--muted)}
+.audit-time{font-size:12px;color:var(--indigo);margin-top:4px;font-weight:600}
+
+/* ── ANALYTICS ── */
+.analytics-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.analytics-row.three{grid-template-columns:1fr 1fr 1fr}
+.a-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px}
+.a-card h3{font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px}
+.a-sub{font-size:12px;color:var(--muted);margin-bottom:20px}
+.a-chart{height:200px;position:relative}
+/* Source list */
+.source-list{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.source-item{display:flex;align-items:center;gap:10px}
+.source-bar-wrap{flex:1;background:rgba(99,102,241,.08);border-radius:100px;height:6px;overflow:hidden}
+.source-bar{height:100%;border-radius:100px;background:var(--grad);transition:width .8s cubic-bezier(.16,1,.3,1)}
+.source-lbl{font-size:12px;color:var(--muted);min-width:80px}
+.source-val{font-size:12px;font-weight:600;min-width:36px;text-align:right}
+
+/* ── ACTIVITY FEED ── */
+.activity-list{display:flex;flex-direction:column;gap:0}
+.act-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid rgba(99,102,241,.07)}
+.act-item:last-child{border-bottom:none}
+.act-dot{width:8px;height:8px;border-radius:50%;background:var(--indigo);flex-shrink:0;margin-top:5px}
+.act-dot.green{background:var(--green)}
+.act-dot.yellow{background:var(--yellow)}
+.act-text{font-size:13px;color:var(--text);line-height:1.5}
+.act-time{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ── EMPTY STATE ── */
+.empty{text-align:center;padding:60px 24px;color:var(--muted)}
+.empty-icon{font-size:48px;margin-bottom:16px}
+.empty h3{font-size:16px;color:var(--text);margin-bottom:8px}
+.empty p{font-size:14px}
+
+/* ── PAGE TITLE ── */
+.page-title{font-family:'Bricolage Grotesque',sans-serif;font-size:28px;font-weight:800;margin-bottom:6px}
+.page-desc{font-size:14px;color:var(--muted);margin-bottom:28px}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .stats-row{grid-template-columns:1fr 1fr}
+  .charts-row{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%)}
+  .main{margin-left:0}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <img src="https://josesuarez.abacusai.app/logo.jpg" alt="José Suárez">
+    <div><div class="sb-logo-text">José Suárez</div><div class="sb-logo-sub">Panel de Admin</div></div>
+  </div>
+  <div class="sb-section">Principal</div>
+  <ul class="sb-nav">
+    <li><a class="active" onclick="showPage('dashboard')"><span class="sb-icon">📊</span>Dashboard</a></li>
+  </ul>
+  <div class="sb-section">Gestión</div>
+  <ul class="sb-nav">
+    <li><a onclick="showPage('contactos')"><span class="sb-icon">💬</span>Contactos<span class="sb-badge" id="sb-contactos-badge">0</span></a></li>
+    <li><a onclick="showPage('auditorias')"><span class="sb-icon">📅</span>Auditorías<span class="sb-badge" id="sb-auditorias-badge">0</span></a></li>
+  </ul>
+  <div class="sb-section">Informes</div>
+  <ul class="sb-nav">
+    <li><a onclick="showPage('analitica')"><span class="sb-icon">📈</span>Analítica</a></li>
+  </ul>
+  <div class="sb-section">Accesos</div>
+  <ul class="sb-nav">
+    <li><a href="index.html" target="_blank"><span class="sb-icon">🌐</span>Ver Web</a></li>
+  </ul>
+  <div class="sb-footer">
+    <div class="sb-user">
+      <div class="sb-avatar">JS</div>
+      <div><div class="sb-user-name">José Suárez</div><div class="sb-user-role">Administrador</div></div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div>
+        <div class="topbar-title" id="topbarTitle">Dashboard</div>
+        <div class="topbar-sub" id="topbarSub">Resumen general de actividad</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <a href="index.html" class="tb-btn" target="_blank">🌐 Ver Web</a>
+      <div class="tb-btn" style="cursor:default"><span id="topbarDate"></span></div>
+    </div>
+  </div>
+
+  <!-- ═══ DASHBOARD ═══ -->
+  <div class="page active" id="page-dashboard">
+
+    <div class="stats-row" id="statsRow"></div>
+
+    <div class="charts-row">
+      <div class="chart-card">
+        <h3>Visitas a la Web</h3>
+        <div class="c-sub">Últimos 14 días</div>
+        <div class="chart-wrap"><canvas id="chartVisitas"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Actividad Reciente</h3>
+        <div class="c-sub">Últimas acciones</div>
+        <div class="activity-list" id="activityFeed"></div>
+      </div>
+    </div>
+
+    <div class="charts-row" style="grid-template-columns:1fr 1fr">
+      <div class="chart-card">
+        <h3>Contactos por Semana</h3>
+        <div class="c-sub">Últimas 8 semanas</div>
+        <div class="chart-wrap"><canvas id="chartContactos"></canvas></div>
+      </div>
+      <div>
+        <div class="section-header" style="margin-bottom:12px">
+          <h3>Próximas Auditorías</h3>
+          <a onclick="showPage('auditorias')" style="font-size:12px;color:var(--indigo);cursor:pointer;text-decoration:none">Ver todas →</a>
+        </div>
+        <div id="dashAudits" style="display:flex;flex-direction:column;gap:10px"></div>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <h3>Últimos Contactos</h3>
+      <a onclick="showPage('contactos')" style="font-size:12px;color:var(--indigo);cursor:pointer;text-decoration:none">Ver todos →</a>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Nombre</th><th>Email</th><th>Fecha</th><th>Estado</th></tr></thead>
+        <tbody id="dashContactsTbl"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ CONTACTOS ═══ -->
+  <div class="page" id="page-contactos">
+    <div class="page-title">Contactos</div>
+    <div class="page-desc">Mensajes recibidos desde el formulario de contacto</div>
+    <div class="filters">
+      <div class="search-box"><span style="color:var(--muted)">🔍</span><input type="text" id="searchContacts" placeholder="Buscar por nombre, email..."></div>
+      <button class="filter-btn active" data-filter="todos" onclick="filterContacts(this,'todos')">Todos</button>
+      <button class="filter-btn" data-filter="nuevo" onclick="filterContacts(this,'nuevo')">Nuevos</button>
+      <button class="filter-btn" data-filter="respondido" onclick="filterContacts(this,'respondido')">Respondidos</button>
+      <button class="filter-btn" data-filter="archivado" onclick="filterContacts(this,'archivado')">Archivados</button>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Nombre</th><th>Email</th><th>Teléfono</th><th>Mensaje</th><th>Fecha</th><th>Estado</th></tr></thead>
+        <tbody id="contactsTbl"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ AUDITORÍAS ═══ -->
+  <div class="page" id="page-auditorias">
+    <div class="page-title">Calendario de Auditorías</div>
+    <div class="page-desc">Llamadas de auditoría agendadas desde la web</div>
+    <div style="display:grid;grid-template-columns:340px 1fr;gap:24px">
+      <!-- Calendar -->
+      <div class="chart-card" style="padding:24px">
+        <div class="cal-header">
+          <div class="cal-nav">
+            <button onclick="calPrev()">‹</button>
+            <span class="cal-month" id="calMonth"></span>
+            <button onclick="calNext()">›</button>
+          </div>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+      <!-- Audit list -->
+      <div>
+        <div class="section-header" style="margin-bottom:14px">
+          <h3 id="auditListTitle">Todas las auditorías</h3>
+          <div style="display:flex;gap:8px">
+            <button class="filter-btn active" data-af="todas" onclick="filterAudits(this,'todas')">Todas</button>
+            <button class="filter-btn" data-af="pendiente" onclick="filterAudits(this,'pendiente')">Pendientes</button>
+            <button class="filter-btn" data-af="completada" onclick="filterAudits(this,'completada')">Completadas</button>
+          </div>
+        </div>
+        <div class="cal-audit-list" id="auditList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ANALÍTICA ═══ -->
+  <div class="page" id="page-analitica">
+    <div class="page-title">Analítica</div>
+    <div class="page-desc">Estadísticas de visitas y comportamiento en la web</div>
+    <div class="stats-row" id="analyticsStats"></div>
+    <div class="analytics-row">
+      <div class="a-card">
+        <h3>Visitas diarias</h3>
+        <div class="a-sub">Últimos 30 días</div>
+        <div class="a-chart"><canvas id="chartDiario"></canvas></div>
+      </div>
+      <div class="a-card">
+        <h3>Fuentes de tráfico</h3>
+        <div class="a-sub">Distribución por origen</div>
+        <div class="a-chart" style="height:180px"><canvas id="chartFuentes"></canvas></div>
+        <div class="source-list" id="sourceList"></div>
+      </div>
+    </div>
+    <div class="analytics-row">
+      <div class="a-card">
+        <h3>Dispositivos</h3>
+        <div class="a-sub">Desktop vs Móvil vs Tablet</div>
+        <div class="a-chart" style="height:160px"><canvas id="chartDevices"></canvas></div>
+      </div>
+      <div class="a-card">
+        <h3>Páginas más visitadas</h3>
+        <div class="a-sub">Top 5 secciones</div>
+        <div class="source-list" id="pagesList" style="margin-top:12px"></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal" onclick="closeModal(event)">
+  <div class="modal" id="modalBox">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+function getContacts(){return JSON.parse(localStorage.getItem('js_contacts')||'[]')}
+function getAudits(){return JSON.parse(localStorage.getItem('js_audits')||'[]')}
+function getVisits(){return JSON.parse(localStorage.getItem('js_visits')||'[]')}
+function saveContacts(arr){localStorage.setItem('js_contacts',JSON.stringify(arr))}
+function saveAudits(arr){localStorage.setItem('js_audits',JSON.stringify(arr))}
+
+// ── UTILS ──
+function fmtDate(iso){
+  const d=new Date(iso);
+  return d.toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'});
+}
+function fmtDateTime(iso){
+  const d=new Date(iso);
+  return d.toLocaleDateString('es-ES',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+}
+function timeSince(iso){
+  const s=Math.floor((Date.now()-new Date(iso))/1000);
+  if(s<3600)return`hace ${Math.floor(s/60)} min`;
+  if(s<86400)return`hace ${Math.floor(s/3600)} h`;
+  return`hace ${Math.floor(s/86400)} días`;
+}
+function badgeHtml(status){return`<span class="badge badge-${status}">${status.charAt(0).toUpperCase()+status.slice(1)}</span>`}
+function truncate(s,n){return s&&s.length>n?s.slice(0,n)+'…':s}
+
+// ── PAGE NAVIGATION ──
+const pages={
+  dashboard:{title:'Dashboard',sub:'Resumen general de actividad'},
+  contactos:{title:'Contactos',sub:'Mensajes recibidos desde la web'},
+  auditorias:{title:'Auditorías',sub:'Calendario de llamadas agendadas'},
+  analitica:{title:'Analítica',sub:'Estadísticas de la web'},
+};
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('.sb-nav a').forEach(a=>a.classList.remove('active'));
+  document.querySelectorAll('.sb-nav a').forEach(a=>{if(a.getAttribute('onclick')&&a.getAttribute('onclick').includes(name))a.classList.add('active');});
+  document.getElementById('topbarTitle').textContent=pages[name].title;
+  document.getElementById('topbarSub').textContent=pages[name].sub;
+  if(name==='dashboard')renderDashboard();
+  if(name==='contactos')renderContacts();
+  if(name==='auditorias'){renderCalendar();renderAuditList();}
+  if(name==='analitica')renderAnalytica();
+}
+
+// ── TOPBAR DATE ──
+const now=new Date();
+document.getElementById('topbarDate').textContent=now.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'});
+
+// ── BADGES IN SIDEBAR ──
+function updateBadges(){
+  const contacts=getContacts();
+  const audits=getAudits();
+  const newContacts=contacts.filter(c=>c.status==='nuevo').length;
+  const pendAudits=audits.filter(a=>a.status==='pendiente').length;
+  const cb=document.getElementById('sb-contactos-badge');
+  const ab=document.getElementById('sb-auditorias-badge');
+  cb.textContent=newContacts;cb.style.display=newContacts?'':'none';
+  ab.textContent=pendAudits;ab.style.display=pendAudits?'':'none';
+}
+
+// ── DASHBOARD ──
+function renderDashboard(){
+  const contacts=getContacts();
+  const audits=getAudits();
+  const today=new Date().toDateString();
+  const visitasHoy=Math.floor(Math.random()*40)+120; // simulated
+
+  const visits=getVisits();
+  const now2=new Date();
+  const monthStart=new Date(now2.getFullYear(),now2.getMonth(),1);
+  const visitsMonth=visits.filter(v=>new Date(v.date)>=monthStart).length;
+  const prevMonthStart=new Date(now2.getFullYear(),now2.getMonth()-1,1);
+  const visitsPrevMonth=visits.filter(v=>{const d=new Date(v.date);return d>=prevMonthStart&&d<monthStart}).length;
+  const visitsPct=visitsPrevMonth?Math.round((visitsMonth-visitsPrevMonth)/visitsPrevMonth*100):0;
+
+  // Stats
+  const stats=[
+    {icon:'👥',val:contacts.length,lbl:'Total Contactos',change:'+'+contacts.filter(c=>Date.now()-new Date(c.date)<7*86400000).length+' esta semana',up:true},
+    {icon:'📅',val:audits.filter(a=>a.status!=='cancelada').length,lbl:'Auditorías',change:audits.filter(a=>a.status==='pendiente').length+' pendientes',up:true},
+    {icon:'🔔',val:contacts.filter(c=>c.status==='nuevo').length,lbl:'Sin responder',change:'Pendientes',up:false},
+    {icon:'📈',val:visitsMonth>=1000?(visitsMonth/1000).toFixed(1)+'K':visitsMonth,lbl:'Visitas (mes)',change:(visitsPct>=0?'+':'')+visitsPct+'% vs anterior',up:visitsPct>=0},
+  ];
+  document.getElementById('statsRow').innerHTML=stats.map(s=>`
+    <div class="stat-card">
+      <div class="stat-icon">${s.icon}</div>
+      <div class="stat-val">${s.val}</div>
+      <div class="stat-lbl">${s.lbl}</div>
+      <div class="stat-change ${s.up?'up':'down'}">${s.up?'↑':'↓'} ${s.change}</div>
+    </div>`).join('');
+
+  // Activity feed
+  const allItems=[...contacts.map(c=>({...c,_type:'contact'})),...audits.map(a=>({...a,_type:'audit'}))].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,6);
+  document.getElementById('activityFeed').innerHTML=allItems.map(item=>`
+    <div class="act-item">
+      <div class="act-dot ${item._type==='audit'?'yellow':''}"></div>
+      <div>
+        <div class="act-text">${item._type==='audit'?'📅 Nueva auditoría':'💬 Nuevo mensaje'}: <strong>${item.nombre}</strong></div>
+        <div class="act-time">${timeSince(item.date)}</div>
+      </div>
+    </div>`).join('');
+
+  // Last contacts table
+  document.getElementById('dashContactsTbl').innerHTML=contacts.slice(0,5).map(c=>`
+    <tr onclick="openContactModal(${c.id})">
+      <td class="td-name">${c.nombre}</td>
+      <td class="td-email">${c.email}</td>
+      <td class="td-date">${fmtDate(c.date)}</td>
+      <td>${badgeHtml(c.status)}</td>
+    </tr>`).join('');
+
+  // Upcoming audits
+  const upcoming=audits.filter(a=>new Date(a.fecha)>=new Date()).sort((a,b)=>new Date(a.fecha)-new Date(b.fecha)).slice(0,3);
+  document.getElementById('dashAudits').innerHTML=upcoming.length?upcoming.map(a=>{
+    const d=new Date(a.fecha);
+    return`<div class="audit-item" onclick="openAuditModal(${a.id})">
+      <div class="audit-date-box"><div class="audit-date-day">${d.getDate()}</div><div class="audit-date-mon">${d.toLocaleString('es',{month:'short'})}</div></div>
+      <div class="audit-info"><div class="audit-name">${a.nombre}</div><div class="audit-salon">${a.salon||'—'}</div><div class="audit-time">${a.hora}</div></div>
+      ${badgeHtml(a.status)}
+    </div>`}).join(''):`<div class="empty"><div class="empty-icon">📅</div><p>No hay auditorías próximas</p></div>`;
+
+  // Charts
+  renderVisitasChart();
+  renderContactosChart();
+}
+
+function renderVisitasChart(){
+  const ctx=document.getElementById('chartVisitas');
+  if(!ctx)return;
+  if(ctx._chart)ctx._chart.destroy();
+  const visits=getVisits();
+  const labels=[],data=[];
+  for(let i=13;i>=0;i--){
+    const d=new Date();d.setDate(d.getDate()-i);d.setHours(0,0,0,0);
+    const next=new Date(d);next.setDate(next.getDate()+1);
+    labels.push(d.toLocaleDateString('es',{day:'numeric',month:'short'}));
+    data.push(visits.filter(v=>{const vd=new Date(v.date);return vd>=d&&vd<next}).length);
+  }
+  ctx._chart=new Chart(ctx,{type:'line',data:{labels,datasets:[{data,borderColor:'#6366f1',backgroundColor:'rgba(99,102,241,.1)',fill:true,tension:.4,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(99,102,241,.06)'},ticks:{color:'#6e6e9a',font:{size:10}}},y:{grid:{color:'rgba(99,102,241,.06)'},ticks:{color:'#6e6e9a',font:{size:10}}}}}});
+}
+function renderContactosChart(){
+  const ctx=document.getElementById('chartContactos');
+  if(!ctx)return;
+  if(ctx._chart)ctx._chart.destroy();
+  const labels=['S1','S2','S3','S4','S5','S6','S7','S8'];
+  const data=[2,4,3,6,5,8,4,getContacts().length];
+  ctx._chart=new Chart(ctx,{type:'bar',data:{labels,datasets:[{data,backgroundColor:'rgba(99,102,241,.4)',borderColor:'#6366f1',borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#6e6e9a',font:{size:10}}},y:{grid:{color:'rgba(99,102,241,.06)'},ticks:{color:'#6e6e9a',font:{size:10},stepSize:2}}}}});
+}
+
+// ── CONTACTS PAGE ──
+let contactFilter='todos', contactSearch='';
+function renderContacts(filter,search){
+  if(filter!==undefined)contactFilter=filter;
+  if(search!==undefined)contactSearch=search;
+  let data=getContacts();
+  if(contactFilter!=='todos')data=data.filter(c=>c.status===contactFilter);
+  if(contactSearch)data=data.filter(c=>c.nombre.toLowerCase().includes(contactSearch.toLowerCase())||c.email.toLowerCase().includes(contactSearch.toLowerCase()));
+  const tbody=document.getElementById('contactsTbl');
+  if(!data.length){tbody.innerHTML=`<tr><td colspan="6"><div class="empty"><div class="empty-icon">📭</div><h3>Sin contactos</h3><p>No hay mensajes que coincidan con el filtro</p></div></td></tr>`;return;}
+  tbody.innerHTML=data.map(c=>`
+    <tr onclick="openContactModal(${c.id})">
+      <td><div class="td-name">${c.nombre}</div></td>
+      <td class="td-email">${c.email}</td>
+      <td>${c.telefono||'—'}</td>
+      <td style="max-width:220px;color:var(--muted);font-size:12px">${truncate(c.mensaje,60)}</td>
+      <td class="td-date">${fmtDate(c.date)}</td>
+      <td>${badgeHtml(c.status)}</td>
+    </tr>`).join('');
+}
+function filterContacts(btn,f){
+  document.querySelectorAll('[data-filter]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderContacts(f);
+}
+document.addEventListener('input',e=>{if(e.target.id==='searchContacts')renderContacts(undefined,e.target.value);});
+
+// ── CALENDAR ──
+let calYear=new Date().getFullYear(), calMonth=new Date().getMonth();
+const monthNames=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+function renderCalendar(){
+  const audits=getAudits();
+  const auditDates=new Set(audits.map(a=>a.fecha));
+  document.getElementById('calMonth').textContent=`${monthNames[calMonth]} ${calYear}`;
+  const grid=document.getElementById('calGrid');
+  grid.innerHTML=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].map(d=>`<div class="cal-day-header">${d}</div>`).join('');
+  const firstDay=new Date(calYear,calMonth,1);
+  let startDow=firstDay.getDay();if(startDow===0)startDow=7;
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  const prevDays=new Date(calYear,calMonth,0).getDate();
+  const todayStr=new Date().toISOString().split('T')[0];
+  // Prev month padding
+  for(let i=startDow-1;i>0;i--){grid.innerHTML+=`<div class="cal-day other-month">${prevDays-i+1}</div>`;}
+  // Current month
+  for(let d=1;d<=daysInMonth;d++){
+    const dateStr=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday=dateStr===todayStr;
+    const hasEv=auditDates.has(dateStr);
+    grid.innerHTML+=`<div class="cal-day${isToday?' today':''}${hasEv?' has-event':''}" onclick="filterAuditsByDate('${dateStr}')">${d}</div>`;
+  }
+}
+function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCalendar();}
+function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalendar();}
+function filterAuditsByDate(date){
+  const audits=getAudits().filter(a=>a.fecha===date);
+  document.getElementById('auditListTitle').textContent=`Auditorías el ${new Date(date+'T12:00').toLocaleDateString('es',{day:'numeric',month:'long'})}`;
+  renderAuditListItems(audits);
+}
+
+let auditFilter='todas';
+function renderAuditList(f){
+  if(f!==undefined)auditFilter=f;
+  let data=getAudits();
+  if(auditFilter!=='todas')data=data.filter(a=>a.status===auditFilter);
+  data.sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
+  document.getElementById('auditListTitle').textContent='Todas las auditorías';
+  renderAuditListItems(data);
+}
+function renderAuditListItems(data){
+  const el=document.getElementById('auditList');
+  if(!data.length){el.innerHTML=`<div class="empty"><div class="empty-icon">📅</div><h3>Sin auditorías</h3><p>No hay auditorías en esta selección</p></div>`;return;}
+  el.innerHTML=data.map(a=>{
+    const d=new Date(a.fecha+'T12:00');
+    return`<div class="audit-item" onclick="openAuditModal(${a.id})">
+      <div class="audit-date-box"><div class="audit-date-day">${d.getDate()}</div><div class="audit-date-mon">${d.toLocaleString('es',{month:'short'})}</div></div>
+      <div class="audit-info"><div class="audit-name">${a.nombre}</div><div class="audit-salon">${a.salon||'Sin salón especificado'}</div><div class="audit-time">⏰ ${a.hora} · ${a.email}</div></div>
+      ${badgeHtml(a.status)}
+    </div>`;
+  }).join('');
+}
+function filterAudits(btn,f){
+  document.querySelectorAll('[data-af]').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAuditList(f);
+}
+
+// ── ANALÍTICA ──
+function renderAnalytica(){
+  const visits=getVisits();
+  const now2=new Date();
+  const monthStart=new Date(now2.getFullYear(),now2.getMonth(),1);
+  const visitsMonth=visits.filter(v=>new Date(v.date)>=monthStart).length;
+  const prevMonthStart=new Date(now2.getFullYear(),now2.getMonth()-1,1);
+  const visitsPrev=visits.filter(v=>{const d=new Date(v.date);return d>=prevMonthStart&&d<monthStart}).length;
+  const pct=visitsPrev?Math.round((visitsMonth-visitsPrev)/visitsPrev*100):0;
+  const uniqueSessions=new Set(visits.map(v=>v.session)).size;
+  const returning=visits.length-uniqueSessions;
+  const returnPct=visits.length?Math.round(returning/visits.length*100):0;
+
+  document.getElementById('analyticsStats').innerHTML=[
+    {icon:'👁',val:visitsMonth.toLocaleString('es'),lbl:'Visitas este mes',change:(pct>=0?'↑ +':'↓ ')+pct+'%',up:pct>=0},
+    {icon:'⏱',val:'2:34',lbl:'Tiempo medio',change:'↑ +18s',up:true},
+    {icon:'👤',val:uniqueSessions.toLocaleString('es'),lbl:'Sesiones únicas',change:'Total registrado',up:true},
+    {icon:'🔄',val:returnPct+'%',lbl:'Usuarios recurrentes',change:'de '+visits.length+' visitas',up:true},
+  ].map(s=>`<div class="stat-card"><div class="stat-icon">${s.icon}</div><div class="stat-val">${s.val}</div><div class="stat-lbl">${s.lbl}</div><div class="stat-change ${s.up?'up':'down'}">${s.change}</div></div>`).join('');
+
+  // Daily chart - REAL DATA
+  const ctx1=document.getElementById('chartDiario');
+  if(ctx1._chart)ctx1._chart.destroy();
+  const days=[],vals=[];
+  for(let i=29;i>=0;i--){
+    const d=new Date();d.setDate(d.getDate()-i);d.setHours(0,0,0,0);
+    const next=new Date(d);next.setDate(next.getDate()+1);
+    days.push(i%5===0?d.toLocaleDateString('es',{day:'numeric',month:'short'}):'');
+    vals.push(visits.filter(v=>{const vd=new Date(v.date);return vd>=d&&vd<next}).length);
+  }
+  ctx1._chart=new Chart(ctx1,{type:'line',data:{labels:days,datasets:[{data:vals,borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,.12)',fill:true,tension:.4,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(99,102,241,.05)'},ticks:{color:'#6e6e9a',font:{size:10}}},y:{grid:{color:'rgba(99,102,241,.05)'},ticks:{color:'#6e6e9a',font:{size:10}}}}}});
+
+  // Fuentes - REAL DATA
+  const srcCounts={};
+  visits.forEach(v=>{srcCounts[v.src||'Directo']=(srcCounts[v.src||'Directo']||0)+1});
+  const totalSrc=visits.length||1;
+  const palette={'Orgánico':'#6366f1','Directo':'#8b5cf6','Redes Sociales':'#a855f7','Referido':'#ec4899'};
+  const fuentes=Object.entries(srcCounts).map(([lbl,v])=>({lbl,val:Math.round(v/totalSrc*100),color:palette[lbl]||'#6366f1'})).sort((a,b)=>b.val-a.val);
+  const ctx2=document.getElementById('chartFuentes');
+  if(ctx2._chart)ctx2._chart.destroy();
+  ctx2._chart=new Chart(ctx2,{type:'doughnut',data:{labels:fuentes.map(f=>f.lbl),datasets:[{data:fuentes.map(f=>f.val),backgroundColor:fuentes.map(f=>f.color),borderWidth:0,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'72%',plugins:{legend:{display:false}}}});
+  document.getElementById('sourceList').innerHTML=fuentes.map(f=>`<div class="source-item"><span class="source-lbl">${f.lbl}</span><div class="source-bar-wrap"><div class="source-bar" style="width:${f.val}%;background:${f.color}"></div></div><span class="source-val">${f.val}%</span></div>`).join('');
+
+  // Devices - REAL DATA
+  const devCounts={Desktop:0,'Móvil':0,Tablet:0};
+  visits.forEach(v=>{if(devCounts[v.device]!==undefined)devCounts[v.device]++});
+  const ctx3=document.getElementById('chartDevices');
+  if(ctx3._chart)ctx3._chart.destroy();
+  ctx3._chart=new Chart(ctx3,{type:'doughnut',data:{labels:['Desktop','Móvil','Tablet'],datasets:[{data:[devCounts.Desktop,devCounts['Móvil'],devCounts.Tablet],backgroundColor:['#6366f1','#a855f7','#ec4899'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{position:'right',labels:{color:'#6e6e9a',font:{size:11},boxWidth:10,padding:12}}}}});
+
+  const pages2=[{lbl:'Inicio',val:38},{lbl:'Servicios',val:24},{lbl:'Formación',val:18},{lbl:'Contacto',val:14},{lbl:'Curso',val:6}];
+  document.getElementById('pagesList').innerHTML=pages2.map(p=>`<div class="source-item"><span class="source-lbl">${p.lbl}</span><div class="source-bar-wrap"><div class="source-bar" style="width:${p.val*2.5}%"></div></div><span class="source-val">${p.val}%</span></div>`).join('');
+}
+
+// ── MODALS ──
+function openContactModal(id){
+  const c=getContacts().find(x=>x.id===id);
+  if(!c)return;
+  document.getElementById('modalContent').innerHTML=`
+    <div class="modal-tag">Mensaje de contacto · ${fmtDateTime(c.date)}</div>
+    <div class="modal-name">${c.nombre}</div>
+    <div class="modal-field"><div class="modal-field-lbl">Email</div><div class="modal-field-val"><a href="mailto:${c.email}" style="color:var(--indigo)">${c.email}</a></div></div>
+    <div class="modal-field"><div class="modal-field-lbl">Teléfono</div><div class="modal-field-val">${c.telefono||'—'}</div></div>
+    <div class="modal-field"><div class="modal-field-lbl">Mensaje</div><div class="modal-field-val">${c.mensaje}</div></div>
+    <div class="modal-field"><div class="modal-field-lbl">Estado actual</div>${badgeHtml(c.status)}</div>
+    <div class="modal-field"><div class="modal-field-lbl">Cambiar estado</div>
+      <div class="modal-status-row">
+        ${['nuevo','respondido','archivado'].map(s=>`<button class="modal-status-opt${c.status===s?' sel':''}" onclick="changeContactStatus(${id},'${s}',this)">${s.charAt(0).toUpperCase()+s.slice(1)}</button>`).join('')}
+      </div>
+    </div>
+    <div class="modal-actions">
+      <a href="mailto:${c.email}" class="modal-btn modal-btn-primary">✉️ Responder por Email</a>
+      <a href="tel:${c.telefono}" class="modal-btn modal-btn-secondary">📞 Llamar</a>
+    </div>`;
+  document.getElementById('modal').classList.add('open');
+}
+function openAuditModal(id){
+  const a=getAudits().find(x=>x.id===id);
+  if(!a)return;
+  const d=new Date(a.fecha+'T12:00');
+  document.getElementById('modalContent').innerHTML=`
+    <div class="modal-tag">Solicitud de Auditoría · ${fmtDate(a.date)}</div>
+    <div class="modal-name">${a.nombre}</div>
+    <div class="modal-field"><div class="modal-field-lbl">Salón</div><div class="modal-field-val">${a.salon||'Sin especificar'}</div></div>
+    <div class="modal-field"><div class="modal-field-lbl">Fecha y hora solicitada</div><div class="modal-field-val" style="font-weight:600;color:var(--indigo)">${d.toLocaleDateString('es',{weekday:'long',day:'numeric',month:'long',year:'numeric'})} a las ${a.hora}</div></div>
+    <div class="modal-field"><div class="modal-field-lbl">Email</div><div class="modal-field-val"><a href="mailto:${a.email}" style="color:var(--indigo)">${a.email}</a></div></div>
+    <div class="modal-field"><div class="modal-field-lbl">Teléfono</div><div class="modal-field-val">${a.telefono||'—'}</div></div>
+    <div class="modal-field"><div class="modal-field-lbl">Qué quiere mejorar</div><div class="modal-field-val">${a.mensaje}</div></div>
+    <div class="modal-field"><div class="modal-field-lbl">Estado</div>${badgeHtml(a.status)}</div>
+    <div class="modal-field"><div class="modal-field-lbl">Cambiar estado</div>
+      <div class="modal-status-row">
+        ${['pendiente','confirmada','completada','cancelada'].map(s=>`<button class="modal-status-opt${a.status===s?' sel':''}" onclick="changeAuditStatus(${id},'${s}',this)">${s.charAt(0).toUpperCase()+s.slice(1)}</button>`).join('')}
+      </div>
+    </div>
+    <div class="modal-actions">
+      <a href="mailto:${a.email}" class="modal-btn modal-btn-primary">✉️ Confirmar por Email</a>
+      <a href="tel:${a.telefono}" class="modal-btn modal-btn-secondary">📞 Llamar</a>
+    </div>`;
+  document.getElementById('modal').classList.add('open');
+}
+function changeContactStatus(id,status,btn){
+  const arr=getContacts();
+  const idx=arr.findIndex(x=>x.id===id);
+  if(idx>-1){arr[idx].status=status;saveContacts(arr);}
+  btn.closest('.modal-status-row').querySelectorAll('.modal-status-opt').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  updateBadges();
+}
+function changeAuditStatus(id,status,btn){
+  const arr=getAudits();
+  const idx=arr.findIndex(x=>x.id===id);
+  if(idx>-1){arr[idx].status=status;saveAudits(arr);}
+  btn.closest('.modal-status-row').querySelectorAll('.modal-status-opt').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  updateBadges();
+}
+function closeModal(e){
+  if(!e||e.target===document.getElementById('modal')||e.target===document.querySelector('.modal-close')){
+    document.getElementById('modal').classList.remove('open');
+  }
+}
+
+// ── INIT ──
+updateBadges();
+renderDashboard();
+</script>
+</body>
+</html>
