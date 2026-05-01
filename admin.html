@@ -205,6 +205,9 @@ tbody td{padding:14px 20px;font-size:13px;vertical-align:middle}
   transition:all .2s;cursor:pointer;
 }
 .audit-item:hover{border-color:rgba(99,102,241,.3);background:rgba(99,102,241,.05)}
+.audit-item.audit-unread{border-left:3px solid var(--indigo)}
+.unread-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--indigo);margin-right:7px;vertical-align:middle;flex-shrink:0}
+.tr-unread .td-name{font-weight:700}
 .audit-date-box{
   min-width:56px;text-align:center;
   background:rgba(99,102,241,.1);border:1px solid var(--border);
@@ -491,6 +494,13 @@ function getAudits(){return JSON.parse(localStorage.getItem('js_audits')||'[]')}
 function getVisits(){return JSON.parse(localStorage.getItem('js_visits')||'[]')}
 function saveContacts(arr){localStorage.setItem('js_contacts',JSON.stringify(arr))}
 function saveAudits(arr){localStorage.setItem('js_audits',JSON.stringify(arr))}
+function clearAllData(){
+  if(!confirm('¿Borrar todos los contactos, auditorías y visitas? Esta acción no se puede deshacer.'))return;
+  localStorage.removeItem('js_contacts');
+  localStorage.removeItem('js_audits');
+  localStorage.removeItem('js_visits');
+  location.reload();
+}
 
 // ── UTILS ──
 function fmtDate(iso){
@@ -538,12 +548,12 @@ document.getElementById('topbarDate').textContent=now.toLocaleDateString('es-ES'
 function updateBadges(){
   const contacts=getContacts();
   const audits=getAudits();
-  const newContacts=contacts.filter(c=>c.status==='nuevo').length;
-  const pendAudits=audits.filter(a=>a.status==='pendiente').length;
+  const unreadContacts=contacts.filter(c=>c.read!==true).length;
+  const unreadAudits=audits.filter(a=>a.read!==true).length;
   const cb=document.getElementById('sb-contactos-badge');
   const ab=document.getElementById('sb-auditorias-badge');
-  cb.textContent=newContacts;cb.style.display=newContacts?'':'none';
-  ab.textContent=pendAudits;ab.style.display=pendAudits?'':'none';
+  cb.textContent=unreadContacts;cb.style.display=unreadContacts?'':'none';
+  ab.textContent=unreadAudits;ab.style.display=unreadAudits?'':'none';
 }
 
 // ── DASHBOARD ──
@@ -645,8 +655,8 @@ function renderContacts(filter,search){
   const tbody=document.getElementById('contactsTbl');
   if(!data.length){tbody.innerHTML=`<tr><td colspan="6"><div class="empty"><div class="empty-icon">📭</div><h3>Sin contactos</h3><p>No hay mensajes que coincidan con el filtro</p></div></td></tr>`;return;}
   tbody.innerHTML=data.map(c=>`
-    <tr onclick="openContactModal(${c.id})">
-      <td><div class="td-name">${c.nombre}</div></td>
+    <tr onclick="openContactModal(${c.id})" class="${c.read?'':'tr-unread'}">
+      <td><div class="td-name">${c.read?'':'<span class="unread-dot"></span>'}${c.nombre}</div></td>
       <td class="td-email">${c.email}</td>
       <td>${c.telefono||'—'}</td>
       <td style="max-width:220px;color:var(--muted);font-size:12px">${truncate(c.mensaje,60)}</td>
@@ -707,9 +717,9 @@ function renderAuditListItems(data){
   if(!data.length){el.innerHTML=`<div class="empty"><div class="empty-icon">📅</div><h3>Sin auditorías</h3><p>No hay auditorías en esta selección</p></div>`;return;}
   el.innerHTML=data.map(a=>{
     const d=new Date(a.fecha+'T12:00');
-    return`<div class="audit-item" onclick="openAuditModal(${a.id})">
+    return`<div class="audit-item${a.read?'':' audit-unread'}" onclick="openAuditModal(${a.id})">
       <div class="audit-date-box"><div class="audit-date-day">${d.getDate()}</div><div class="audit-date-mon">${d.toLocaleString('es',{month:'short'})}</div></div>
-      <div class="audit-info"><div class="audit-name">${a.nombre}</div><div class="audit-salon">${a.salon||'Sin salón especificado'}</div><div class="audit-time">⏰ ${a.hora} · ${a.email}</div></div>
+      <div class="audit-info"><div class="audit-name">${a.read?'':'<span class="unread-dot"></span>'}${a.nombre}</div><div class="audit-salon">${a.salon||'Sin salón especificado'}</div><div class="audit-time">⏰ ${a.hora} · ${a.email}</div></div>
       ${badgeHtml(a.status)}
     </div>`;
   }).join('');
@@ -776,8 +786,11 @@ function renderAnalytica(){
 
 // ── MODALS ──
 function openContactModal(id){
-  const c=getContacts().find(x=>x.id===id);
-  if(!c)return;
+  const arr=getContacts();
+  const idx=arr.findIndex(x=>x.id===id);
+  if(idx===-1)return;
+  if(!arr[idx].read){arr[idx].read=true;saveContacts(arr);updateBadges();renderContacts();}
+  const c=arr[idx];
   document.getElementById('modalContent').innerHTML=`
     <div class="modal-tag">Mensaje de contacto · ${fmtDateTime(c.date)}</div>
     <div class="modal-name">${c.nombre}</div>
@@ -797,8 +810,11 @@ function openContactModal(id){
   document.getElementById('modal').classList.add('open');
 }
 function openAuditModal(id){
-  const a=getAudits().find(x=>x.id===id);
-  if(!a)return;
+  const arr2=getAudits();
+  const idx2=arr2.findIndex(x=>x.id===id);
+  if(idx2===-1)return;
+  if(!arr2[idx2].read){arr2[idx2].read=true;saveAudits(arr2);updateBadges();renderAuditList();}
+  const a=arr2[idx2];
   const d=new Date(a.fecha+'T12:00');
   document.getElementById('modalContent').innerHTML=`
     <div class="modal-tag">Solicitud de Auditoría · ${fmtDate(a.date)}</div>
