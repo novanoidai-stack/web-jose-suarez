@@ -732,7 +732,6 @@ footer a:hover{color:var(--indigo)}
   <span>© 2026 José Suárez — Consultor IA. Todos los derechos reservados.</span>
   <div style="display:flex;align-items:center;gap:16px">
     <a href="mailto:Info@josesuarez.es">Info@josesuarez.es</a>
-    <a href="admin.html" class="footer-admin">🔐 Panel Admin</a>
   </div>
 </footer>
 
@@ -931,6 +930,9 @@ document.getElementById('formAuditoria').addEventListener('submit',async functio
   this.style.display='none';
   document.getElementById('okAuditoria').style.display='block';
 });
+
+// ── SECRET ADMIN ACCESS ──
+(function(){let s='';document.addEventListener('keydown',e=>{s=(s+e.key).slice(-5);if(s==='admin')window.location.href='admin.html';});})();
 
 // ── REAL ANALYTICS TRACKING ──
 (function trackVisit(){
