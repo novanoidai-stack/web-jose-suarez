@@ -924,7 +924,8 @@ document.getElementById('formAuditoria').addEventListener('submit',async functio
   e.preventDefault();
   const fd=new FormData(this);
   const data=Object.fromEntries(fd);
-  sb.from('audits').insert({nombre:data.nombre,email:data.email,telefono:data.telefono||'',salon:data.salon||'',fecha:data.fecha,hora:data.hora,mensaje:data.mensaje,status:'pendiente'});
+  const r=await sb.from('audits').insert({nombre:data.nombre,email:data.email,telefono:data.telefono||'',salon:data.salon||'',fecha:data.fecha,hora:data.hora,mensaje:data.mensaje,status:'pendiente'});
+  console.log('audit insert:',r);
   // emailjs.send(EJS_SERVICE_ID, EJS_TPL_AUDIT, {...data, to_email: EJS_TO_EMAIL});
   this.style.display='none';
   document.getElementById('okAuditoria').style.display='block';
