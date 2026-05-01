@@ -905,7 +905,7 @@ document.getElementById('formMensaje').addEventListener('submit',async function(
   const fd=new FormData(this);
   const data=Object.fromEntries(fd);
   sb.from('contacts').insert({nombre:data.nombre,email:data.email,telefono:data.telefono||'',mensaje:data.mensaje,type:'mensaje',status:'nuevo'});
-  emailjs.send(EJS_SERVICE_ID, EJS_TPL_CONTACT, {...data, to_email: EJS_TO_EMAIL});
+  // emailjs.send(EJS_SERVICE_ID, EJS_TPL_CONTACT, {...data, to_email: EJS_TO_EMAIL});
   this.style.display='none';
   document.getElementById('okMensaje').style.display='block';
 });
@@ -915,7 +915,7 @@ if(leadForm){leadForm.addEventListener('submit',async function(e){
   const fd=new FormData(this);
   const email=fd.get('email');
   sb.from('contacts').insert({nombre:'Suscripción Newsletter',email,telefono:'',mensaje:'Solicitó la guía gratuita: 7 herramientas IA',type:'lead',status:'nuevo'});
-  emailjs.send(EJS_SERVICE_ID, EJS_TPL_LEAD, {nombre:'Lead web', email, telefono:'', mensaje:'Solicitó la guía gratuita: 7 herramientas IA', to_email: EJS_TO_EMAIL});
+  // emailjs.send(EJS_SERVICE_ID, EJS_TPL_LEAD, {nombre:'Lead web', email, telefono:'', mensaje:'Solicitó la guía gratuita: 7 herramientas IA', to_email: EJS_TO_EMAIL});
   this.style.display='none';
   document.getElementById('okLead').style.display='block';
 });}
@@ -925,7 +925,7 @@ document.getElementById('formAuditoria').addEventListener('submit',async functio
   const fd=new FormData(this);
   const data=Object.fromEntries(fd);
   sb.from('audits').insert({nombre:data.nombre,email:data.email,telefono:data.telefono||'',salon:data.salon||'',fecha:data.fecha,hora:data.hora,mensaje:data.mensaje,status:'pendiente'});
-  emailjs.send(EJS_SERVICE_ID, EJS_TPL_AUDIT, {...data, to_email: EJS_TO_EMAIL});
+  // emailjs.send(EJS_SERVICE_ID, EJS_TPL_AUDIT, {...data, to_email: EJS_TO_EMAIL});
   this.style.display='none';
   document.getElementById('okAuditoria').style.display='block';
 });
