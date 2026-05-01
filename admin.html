@@ -196,6 +196,7 @@ tbody td{padding:14px 20px;font-size:13px;vertical-align:middle}
 .cal-day:hover{background:rgba(99,102,241,.1)}
 .cal-day.other-month{color:rgba(110,110,154,.4)}
 .cal-day.today{background:rgba(99,102,241,.12);color:var(--indigo);font-weight:700}
+.cal-day.selected{background:var(--indigo);color:#fff;font-weight:700}
 .cal-day.has-event::after{content:'';width:5px;height:5px;border-radius:50%;background:var(--grad);position:absolute;bottom:5px}
 .cal-day.has-event.today::after{background:var(--text)}
 .cal-audit-list{margin-top:24px;display:flex;flex-direction:column;gap:10px}
@@ -692,12 +693,14 @@ async function renderCalendar(){
     const dateStr=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     const isToday=dateStr===todayStr;
     const hasEv=auditDates.has(dateStr);
-    grid.innerHTML+=`<div class="cal-day${isToday?' today':''}${hasEv?' has-event':''}" onclick="filterAuditsByDate('${dateStr}')">${d}</div>`;
+    grid.innerHTML+=`<div class="cal-day${isToday?' today':''}${hasEv?' has-event':''}" onclick="filterAuditsByDate('${dateStr}',this)">${d}</div>`;
   }
 }
 function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCalendar();}
 function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalendar();}
-async function filterAuditsByDate(date){
+async function filterAuditsByDate(date,el){
+  document.querySelectorAll('.cal-day.selected').forEach(d=>d.classList.remove('selected'));
+  if(el)el.classList.add('selected');
   const all=await getAudits();
   const audits=all.filter(a=>a.fecha===date);
   document.getElementById('auditListTitle').textContent=`Auditorías el ${new Date(date+'T12:00').toLocaleDateString('es',{day:'numeric',month:'long'})}`;

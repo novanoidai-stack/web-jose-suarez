@@ -904,7 +904,8 @@ document.getElementById('formMensaje').addEventListener('submit',async function(
   e.preventDefault();
   const fd=new FormData(this);
   const data=Object.fromEntries(fd);
-  sb.from('contacts').insert({nombre:data.nombre,email:data.email,telefono:data.telefono||'',mensaje:data.mensaje,type:'mensaje',status:'nuevo'});
+  const rc=await sb.from('contacts').insert({nombre:data.nombre,email:data.email,telefono:data.telefono||'',mensaje:data.mensaje,type:'mensaje',status:'nuevo'});
+  console.log('contact insert:',rc);
   // emailjs.send(EJS_SERVICE_ID, EJS_TPL_CONTACT, {...data, to_email: EJS_TO_EMAIL});
   this.style.display='none';
   document.getElementById('okMensaje').style.display='block';
