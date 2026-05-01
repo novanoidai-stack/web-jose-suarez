@@ -9,6 +9,7 @@
 <title>Admin — José Suárez IA</title>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
   --bg:#070710;--s1:#0d0d1f;--s2:#13132b;--s3:#191935;
@@ -489,18 +490,10 @@ function checkPwd(){
 
 <script>
 // ── DATA ──
-function getContacts(){return JSON.parse(localStorage.getItem('js_contacts')||'[]')}
-function getAudits(){return JSON.parse(localStorage.getItem('js_audits')||'[]')}
-function getVisits(){return JSON.parse(localStorage.getItem('js_visits')||'[]')}
-function saveContacts(arr){localStorage.setItem('js_contacts',JSON.stringify(arr))}
-function saveAudits(arr){localStorage.setItem('js_audits',JSON.stringify(arr))}
-function clearAllData(){
-  if(!confirm('¿Borrar todos los contactos, auditorías y visitas? Esta acción no se puede deshacer.'))return;
-  localStorage.removeItem('js_contacts');
-  localStorage.removeItem('js_audits');
-  localStorage.removeItem('js_visits');
-  location.reload();
-}
+const sb=supabase.createClient('https://kebdikpbaxzwpljidcys.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtlYmRpa3BiYXh6d3BsamlkY3lzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2Mjc1MzQsImV4cCI6MjA5MzIwMzUzNH0.wHCoVsQdtu1orYHxCjVMjbATBw1v3G2Qz4h6Lsq59UQ');
+async function getVisits(){const{data}=await sb.from('visits').select('*').order('created_at',{ascending:false});return data||[];}
+async function getContacts(){const{data}=await sb.from('contacts').select('*').order('created_at',{ascending:false});return data||[];}
+async function getAudits(){const{data}=await sb.from('audits').select('*').order('created_at',{ascending:false});return data||[];}
 
 // ── UTILS ──
 function fmtDate(iso){
@@ -545,9 +538,9 @@ const now=new Date();
 document.getElementById('topbarDate').textContent=now.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'});
 
 // ── BADGES IN SIDEBAR ──
-function updateBadges(){
-  const contacts=getContacts();
-  const audits=getAudits();
+async function updateBadges(){
+  const contacts=await getContacts();
+  const audits=await getAudits();
   const unreadContacts=contacts.filter(c=>c.read!==true).length;
   const unreadAudits=audits.filter(a=>a.read!==true).length;
   const cb=document.getElementById('sb-contactos-badge');
@@ -557,23 +550,23 @@ function updateBadges(){
 }
 
 // ── DASHBOARD ──
-function renderDashboard(){
-  const contacts=getContacts();
-  const audits=getAudits();
+async function renderDashboard(){
+  const contacts=await getContacts();
+  const audits=await getAudits();
   const today=new Date().toDateString();
   const visitasHoy=Math.floor(Math.random()*40)+120; // simulated
 
-  const visits=getVisits();
+  const visits=await getVisits();
   const now2=new Date();
   const monthStart=new Date(now2.getFullYear(),now2.getMonth(),1);
-  const visitsMonth=visits.filter(v=>new Date(v.date)>=monthStart).length;
+  const visitsMonth=visits.filter(v=>new Date(v.created_at)>=monthStart).length;
   const prevMonthStart=new Date(now2.getFullYear(),now2.getMonth()-1,1);
-  const visitsPrevMonth=visits.filter(v=>{const d=new Date(v.date);return d>=prevMonthStart&&d<monthStart}).length;
+  const visitsPrevMonth=visits.filter(v=>{const d=new Date(v.created_at);return d>=prevMonthStart&&d<monthStart}).length;
   const visitsPct=visitsPrevMonth?Math.round((visitsMonth-visitsPrevMonth)/visitsPrevMonth*100):0;
 
   // Stats
   const stats=[
-    {icon:'👥',val:contacts.length,lbl:'Total Contactos',change:'+'+contacts.filter(c=>Date.now()-new Date(c.date)<7*86400000).length+' esta semana',up:true},
+    {icon:'👥',val:contacts.length,lbl:'Total Contactos',change:'+'+contacts.filter(c=>Date.now()-new Date(c.created_at)<7*86400000).length+' esta semana',up:true},
     {icon:'📅',val:audits.filter(a=>a.status!=='cancelada').length,lbl:'Auditorías',change:audits.filter(a=>a.status==='pendiente').length+' pendientes',up:true},
     {icon:'🔔',val:contacts.filter(c=>c.status==='nuevo').length,lbl:'Sin responder',change:'Pendientes',up:false},
     {icon:'📈',val:visitsMonth>=1000?(visitsMonth/1000).toFixed(1)+'K':visitsMonth,lbl:'Visitas (mes)',change:(visitsPct>=0?'+':'')+visitsPct+'% vs anterior',up:visitsPct>=0},
@@ -587,13 +580,13 @@ function renderDashboard(){
     </div>`).join('');
 
   // Activity feed
-  const allItems=[...contacts.map(c=>({...c,_type:'contact'})),...audits.map(a=>({...a,_type:'audit'}))].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,6);
+  const allItems=[...contacts.map(c=>({...c,_type:'contact'})),...audits.map(a=>({...a,_type:'audit'}))].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at)).slice(0,6);
   document.getElementById('activityFeed').innerHTML=allItems.map(item=>`
     <div class="act-item">
       <div class="act-dot ${item._type==='audit'?'yellow':''}"></div>
       <div>
         <div class="act-text">${item._type==='audit'?'📅 Nueva auditoría':'💬 Nuevo mensaje'}: <strong>${item.nombre}</strong></div>
-        <div class="act-time">${timeSince(item.date)}</div>
+        <div class="act-time">${timeSince(item.created_at)}</div>
       </div>
     </div>`).join('');
 
@@ -602,7 +595,7 @@ function renderDashboard(){
     <tr onclick="openContactModal(${c.id})">
       <td class="td-name">${c.nombre}</td>
       <td class="td-email">${c.email}</td>
-      <td class="td-date">${fmtDate(c.date)}</td>
+      <td class="td-date">${fmtDate(c.created_at)}</td>
       <td>${badgeHtml(c.status)}</td>
     </tr>`).join('');
 
@@ -621,35 +614,42 @@ function renderDashboard(){
   renderContactosChart();
 }
 
-function renderVisitasChart(){
+async function renderVisitasChart(){
   const ctx=document.getElementById('chartVisitas');
   if(!ctx)return;
   if(ctx._chart)ctx._chart.destroy();
-  const visits=getVisits();
+  const visits=await getVisits();
   const labels=[],data=[];
   for(let i=13;i>=0;i--){
     const d=new Date();d.setDate(d.getDate()-i);d.setHours(0,0,0,0);
     const next=new Date(d);next.setDate(next.getDate()+1);
     labels.push(d.toLocaleDateString('es',{day:'numeric',month:'short'}));
-    data.push(visits.filter(v=>{const vd=new Date(v.date);return vd>=d&&vd<next}).length);
+    data.push(visits.filter(v=>{const vd=new Date(v.created_at);return vd>=d&&vd<next}).length);
   }
-  ctx._chart=new Chart(ctx,{type:'line',data:{labels,datasets:[{data,borderColor:'#6366f1',backgroundColor:'rgba(99,102,241,.1)',fill:true,tension:.4,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(99,102,241,.06)'},ticks:{color:'#6e6e9a',font:{size:10}}},y:{grid:{color:'rgba(99,102,241,.06)'},ticks:{color:'#6e6e9a',font:{size:10}}}}}});
+  ctx._chart=new Chart(ctx,{type:'line',data:{labels,datasets:[{data,borderColor:'#6366f1',backgroundColor:'rgba(99,102,241,.1)',fill:true,tension:.4,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(99,102,241,.06)'},ticks:{color:'#6e6e9a',font:{size:10}}},y:{min:0,grid:{color:'rgba(99,102,241,.06)'},ticks:{color:'#6e6e9a',font:{size:10},stepSize:1}}}}});
 }
-function renderContactosChart(){
+async function renderContactosChart(){
   const ctx=document.getElementById('chartContactos');
   if(!ctx)return;
   if(ctx._chart)ctx._chart.destroy();
-  const labels=['S1','S2','S3','S4','S5','S6','S7','S8'];
-  const data=[2,4,3,6,5,8,4,getContacts().length];
-  ctx._chart=new Chart(ctx,{type:'bar',data:{labels,datasets:[{data,backgroundColor:'rgba(99,102,241,.4)',borderColor:'#6366f1',borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#6e6e9a',font:{size:10}}},y:{grid:{color:'rgba(99,102,241,.06)'},ticks:{color:'#6e6e9a',font:{size:10},stepSize:2}}}}});
+  const contacts=await getContacts();
+  const now=new Date();
+  const labels=[],data=[];
+  for(let i=7;i>=0;i--){
+    const start=new Date(now);start.setDate(now.getDate()-i*7-6);start.setHours(0,0,0,0);
+    const end=new Date(now);end.setDate(now.getDate()-i*7+1);end.setHours(23,59,59,999);
+    labels.push('S'+(8-i));
+    data.push(contacts.filter(c=>{const d=new Date(c.created_at);return d>=start&&d<=end;}).length);
+  }
+  ctx._chart=new Chart(ctx,{type:'bar',data:{labels,datasets:[{data,backgroundColor:'rgba(99,102,241,.4)',borderColor:'#6366f1',borderWidth:1,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#6e6e9a',font:{size:10}}},y:{grid:{color:'rgba(99,102,241,.06)'},ticks:{color:'#6e6e9a',font:{size:10},stepSize:1}}}}});
 }
 
 // ── CONTACTS PAGE ──
 let contactFilter='todos', contactSearch='';
-function renderContacts(filter,search){
+async function renderContacts(filter,search){
   if(filter!==undefined)contactFilter=filter;
   if(search!==undefined)contactSearch=search;
-  let data=getContacts();
+  let data=await getContacts();
   if(contactFilter!=='todos')data=data.filter(c=>c.status===contactFilter);
   if(contactSearch)data=data.filter(c=>c.nombre.toLowerCase().includes(contactSearch.toLowerCase())||c.email.toLowerCase().includes(contactSearch.toLowerCase()));
   const tbody=document.getElementById('contactsTbl');
@@ -660,7 +660,7 @@ function renderContacts(filter,search){
       <td class="td-email">${c.email}</td>
       <td>${c.telefono||'—'}</td>
       <td style="max-width:220px;color:var(--muted);font-size:12px">${truncate(c.mensaje,60)}</td>
-      <td class="td-date">${fmtDate(c.date)}</td>
+      <td class="td-date">${fmtDate(c.created_at)}</td>
       <td>${badgeHtml(c.status)}</td>
     </tr>`).join('');
 }
@@ -674,8 +674,8 @@ document.addEventListener('input',e=>{if(e.target.id==='searchContacts')renderCo
 // ── CALENDAR ──
 let calYear=new Date().getFullYear(), calMonth=new Date().getMonth();
 const monthNames=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-function renderCalendar(){
-  const audits=getAudits();
+async function renderCalendar(){
+  const audits=await getAudits();
   const auditDates=new Set(audits.map(a=>a.fecha));
   document.getElementById('calMonth').textContent=`${monthNames[calMonth]} ${calYear}`;
   const grid=document.getElementById('calGrid');
@@ -697,16 +697,17 @@ function renderCalendar(){
 }
 function calPrev(){calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCalendar();}
 function calNext(){calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalendar();}
-function filterAuditsByDate(date){
-  const audits=getAudits().filter(a=>a.fecha===date);
+async function filterAuditsByDate(date){
+  const all=await getAudits();
+  const audits=all.filter(a=>a.fecha===date);
   document.getElementById('auditListTitle').textContent=`Auditorías el ${new Date(date+'T12:00').toLocaleDateString('es',{day:'numeric',month:'long'})}`;
   renderAuditListItems(audits);
 }
 
 let auditFilter='todas';
-function renderAuditList(f){
+async function renderAuditList(f){
   if(f!==undefined)auditFilter=f;
-  let data=getAudits();
+  let data=await getAudits();
   if(auditFilter!=='todas')data=data.filter(a=>a.status===auditFilter);
   data.sort((a,b)=>new Date(a.fecha)-new Date(b.fecha));
   document.getElementById('auditListTitle').textContent='Todas las auditorías';
@@ -731,15 +732,15 @@ function filterAudits(btn,f){
 }
 
 // ── ANALÍTICA ──
-function renderAnalytica(){
-  const visits=getVisits();
+async function renderAnalytica(){
+  const visits=await getVisits();
   const now2=new Date();
   const monthStart=new Date(now2.getFullYear(),now2.getMonth(),1);
-  const visitsMonth=visits.filter(v=>new Date(v.date)>=monthStart).length;
+  const visitsMonth=visits.filter(v=>new Date(v.created_at)>=monthStart).length;
   const prevMonthStart=new Date(now2.getFullYear(),now2.getMonth()-1,1);
-  const visitsPrev=visits.filter(v=>{const d=new Date(v.date);return d>=prevMonthStart&&d<monthStart}).length;
+  const visitsPrev=visits.filter(v=>{const d=new Date(v.created_at);return d>=prevMonthStart&&d<monthStart}).length;
   const pct=visitsPrev?Math.round((visitsMonth-visitsPrev)/visitsPrev*100):0;
-  const uniqueSessions=new Set(visits.map(v=>v.session)).size;
+  const uniqueSessions=new Set(visits.map(v=>v.session_id)).size;
   const returning=visits.length-uniqueSessions;
   const returnPct=visits.length?Math.round(returning/visits.length*100):0;
 
@@ -758,7 +759,7 @@ function renderAnalytica(){
     const d=new Date();d.setDate(d.getDate()-i);d.setHours(0,0,0,0);
     const next=new Date(d);next.setDate(next.getDate()+1);
     days.push(i%5===0?d.toLocaleDateString('es',{day:'numeric',month:'short'}):'');
-    vals.push(visits.filter(v=>{const vd=new Date(v.date);return vd>=d&&vd<next}).length);
+    vals.push(visits.filter(v=>{const vd=new Date(v.created_at);return vd>=d&&vd<next}).length);
   }
   ctx1._chart=new Chart(ctx1,{type:'line',data:{labels:days,datasets:[{data:vals,borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,.12)',fill:true,tension:.4,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(99,102,241,.05)'},ticks:{color:'#6e6e9a',font:{size:10}}},y:{grid:{color:'rgba(99,102,241,.05)'},ticks:{color:'#6e6e9a',font:{size:10}}}}}});
 
@@ -785,14 +786,14 @@ function renderAnalytica(){
 }
 
 // ── MODALS ──
-function openContactModal(id){
-  const arr=getContacts();
+async function openContactModal(id){
+  const arr=await getContacts();
   const idx=arr.findIndex(x=>x.id===id);
   if(idx===-1)return;
-  if(!arr[idx].read){arr[idx].read=true;saveContacts(arr);updateBadges();renderContacts();}
+  if(!arr[idx].read){await sb.from('contacts').update({read:true}).eq('id',id);updateBadges();renderContacts();}
   const c=arr[idx];
   document.getElementById('modalContent').innerHTML=`
-    <div class="modal-tag">Mensaje de contacto · ${fmtDateTime(c.date)}</div>
+    <div class="modal-tag">Mensaje de contacto · ${fmtDateTime(c.created_at)}</div>
     <div class="modal-name">${c.nombre}</div>
     <div class="modal-field"><div class="modal-field-lbl">Email</div><div class="modal-field-val"><a href="mailto:${c.email}" style="color:var(--indigo)">${c.email}</a></div></div>
     <div class="modal-field"><div class="modal-field-lbl">Teléfono</div><div class="modal-field-val">${c.telefono||'—'}</div></div>
@@ -809,15 +810,15 @@ function openContactModal(id){
     </div>`;
   document.getElementById('modal').classList.add('open');
 }
-function openAuditModal(id){
-  const arr2=getAudits();
+async function openAuditModal(id){
+  const arr2=await getAudits();
   const idx2=arr2.findIndex(x=>x.id===id);
   if(idx2===-1)return;
-  if(!arr2[idx2].read){arr2[idx2].read=true;saveAudits(arr2);updateBadges();renderAuditList();}
+  if(!arr2[idx2].read){await sb.from('audits').update({read:true}).eq('id',id);updateBadges();renderAuditList();}
   const a=arr2[idx2];
   const d=new Date(a.fecha+'T12:00');
   document.getElementById('modalContent').innerHTML=`
-    <div class="modal-tag">Solicitud de Auditoría · ${fmtDate(a.date)}</div>
+    <div class="modal-tag">Solicitud de Auditoría · ${fmtDate(a.created_at)}</div>
     <div class="modal-name">${a.nombre}</div>
     <div class="modal-field"><div class="modal-field-lbl">Salón</div><div class="modal-field-val">${a.salon||'Sin especificar'}</div></div>
     <div class="modal-field"><div class="modal-field-lbl">Fecha y hora solicitada</div><div class="modal-field-val" style="font-weight:600;color:var(--indigo)">${d.toLocaleDateString('es',{weekday:'long',day:'numeric',month:'long',year:'numeric'})} a las ${a.hora}</div></div>
@@ -836,18 +837,14 @@ function openAuditModal(id){
     </div>`;
   document.getElementById('modal').classList.add('open');
 }
-function changeContactStatus(id,status,btn){
-  const arr=getContacts();
-  const idx=arr.findIndex(x=>x.id===id);
-  if(idx>-1){arr[idx].status=status;saveContacts(arr);}
+async function changeContactStatus(id,status,btn){
+  await sb.from('contacts').update({status}).eq('id',id);
   btn.closest('.modal-status-row').querySelectorAll('.modal-status-opt').forEach(b=>b.classList.remove('sel'));
   btn.classList.add('sel');
   updateBadges();
 }
-function changeAuditStatus(id,status,btn){
-  const arr=getAudits();
-  const idx=arr.findIndex(x=>x.id===id);
-  if(idx>-1){arr[idx].status=status;saveAudits(arr);}
+async function changeAuditStatus(id,status,btn){
+  await sb.from('audits').update({status}).eq('id',id);
   btn.closest('.modal-status-row').querySelectorAll('.modal-status-opt').forEach(b=>b.classList.remove('sel'));
   btn.classList.add('sel');
   updateBadges();

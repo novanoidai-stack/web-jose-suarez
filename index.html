@@ -6,6 +6,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="vC0IZLPopx4fdikYrP1DYBeSSk_Ri65dbVCH86zRRFE" />
 <title>José Suárez — Consultor IA para Peluquerías</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%236366f1'/><stop offset='100%25' stop-color='%23a855f7'/></linearGradient></defs><rect width='32' height='32' rx='8' fill='url(%23g)'/><text x='16' y='22' font-family='Arial' font-weight='bold' font-size='13' fill='white' text-anchor='middle'>JS</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,500;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
@@ -336,6 +337,7 @@ footer a:hover{color:var(--indigo)}
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -743,6 +745,7 @@ const EJS_TPL_AUDIT    = 'template_vocqzqi';
 const EJS_TPL_LEAD     = 'template_wmu92de';
 const EJS_TO_EMAIL     = 'Info@josesuarez.es';
 emailjs.init(EJS_PUBLIC_KEY);
+const sb = supabase.createClient('https://kebdikpbaxzwpljidcys.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtlYmRpa3BiYXh6d3BsamlkY3lzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2Mjc1MzQsImV4cCI6MjA5MzIwMzUzNH0.wHCoVsQdtu1orYHxCjVMjbATBw1v3G2Qz4h6Lsq59UQ');
 
 // MARQUEE
 const mtrack = document.getElementById('mtrack');
@@ -897,45 +900,31 @@ function switchTab(tab){
   document.getElementById('panel-'+tab).classList.add('active');
 }
 
-// SAVE TO LOCALSTORAGE
-function saveContact(data){
-  const arr=JSON.parse(localStorage.getItem('js_contacts')||'[]');
-  arr.unshift({id:Date.now(),type:'mensaje',...data,date:new Date().toISOString(),status:'nuevo'});
-  localStorage.setItem('js_contacts',JSON.stringify(arr));
-}
-function saveAudit(data){
-  const arr=JSON.parse(localStorage.getItem('js_audits')||'[]');
-  arr.unshift({id:Date.now(),type:'auditoria',...data,date:new Date().toISOString(),status:'pendiente'});
-  localStorage.setItem('js_audits',JSON.stringify(arr));
-}
-
-document.getElementById('formMensaje').addEventListener('submit',function(e){
+document.getElementById('formMensaje').addEventListener('submit',async function(e){
   e.preventDefault();
   const fd=new FormData(this);
   const data=Object.fromEntries(fd);
-  saveContact(data);
+  sb.from('contacts').insert({nombre:data.nombre,email:data.email,telefono:data.telefono||'',mensaje:data.mensaje,type:'mensaje',status:'nuevo'});
   emailjs.send(EJS_SERVICE_ID, EJS_TPL_CONTACT, {...data, to_email: EJS_TO_EMAIL});
   this.style.display='none';
   document.getElementById('okMensaje').style.display='block';
 });
 const leadForm=document.getElementById('leadForm');
-if(leadForm){leadForm.addEventListener('submit',function(e){
+if(leadForm){leadForm.addEventListener('submit',async function(e){
   e.preventDefault();
   const fd=new FormData(this);
   const email=fd.get('email');
-  const arr=JSON.parse(localStorage.getItem('js_contacts')||'[]');
-  arr.unshift({id:Date.now(),type:'lead',nombre:'Suscripción Newsletter',email,telefono:'',mensaje:'Solicitó guía gratuita: 7 herramientas IA',date:new Date().toISOString(),status:'nuevo'});
-  localStorage.setItem('js_contacts',JSON.stringify(arr));
+  sb.from('contacts').insert({nombre:'Suscripción Newsletter',email,telefono:'',mensaje:'Solicitó la guía gratuita: 7 herramientas IA',type:'lead',status:'nuevo'});
   emailjs.send(EJS_SERVICE_ID, EJS_TPL_LEAD, {nombre:'Lead web', email, telefono:'', mensaje:'Solicitó la guía gratuita: 7 herramientas IA', to_email: EJS_TO_EMAIL});
   this.style.display='none';
   document.getElementById('okLead').style.display='block';
 });}
 
-document.getElementById('formAuditoria').addEventListener('submit',function(e){
+document.getElementById('formAuditoria').addEventListener('submit',async function(e){
   e.preventDefault();
   const fd=new FormData(this);
   const data=Object.fromEntries(fd);
-  saveAudit(data);
+  sb.from('audits').insert({nombre:data.nombre,email:data.email,telefono:data.telefono||'',salon:data.salon||'',fecha:data.fecha,hora:data.hora,mensaje:data.mensaje,status:'pendiente'});
   emailjs.send(EJS_SERVICE_ID, EJS_TPL_AUDIT, {...data, to_email: EJS_TO_EMAIL});
   this.style.display='none';
   document.getElementById('okAuditoria').style.display='block';
@@ -943,67 +932,20 @@ document.getElementById('formAuditoria').addEventListener('submit',function(e){
 
 // ── REAL ANALYTICS TRACKING ──
 (function trackVisit(){
-  const visits=JSON.parse(localStorage.getItem('js_visits')||'[]');
-  const sessionId=sessionStorage.getItem('js_session');
-  if(!sessionId){
-    // New session — record visit
-    const newId=Date.now()+'_'+Math.random().toString(36).slice(2,8);
-    sessionStorage.setItem('js_session',newId);
-    let src='Directo';
-    if(document.referrer){
-      const r=document.referrer.toLowerCase();
-      if(r.includes('google')||r.includes('bing')||r.includes('duckduckgo')) src='Orgánico';
-      else if(r.includes('instagram')||r.includes('facebook')||r.includes('twitter')||r.includes('linkedin')||r.includes('tiktok')) src='Redes Sociales';
-      else src='Referido';
-    }
-    const device=window.innerWidth<768?'Móvil':window.innerWidth<1100?'Tablet':'Desktop';
-    visits.push({date:new Date().toISOString(),session:newId,src,device,page:'home'});
-    if(visits.length>1000) visits.splice(0,visits.length-1000);
-    localStorage.setItem('js_visits',JSON.stringify(visits));
+  if(sessionStorage.getItem('js_session'))return;
+  const newId=Date.now()+'_'+Math.random().toString(36).slice(2,8);
+  sessionStorage.setItem('js_session',newId);
+  let src='Directo';
+  if(document.referrer){
+    const r=document.referrer.toLowerCase();
+    if(r.includes('google')||r.includes('bing')||r.includes('duckduckgo')) src='Orgánico';
+    else if(r.includes('instagram')||r.includes('facebook')||r.includes('twitter')||r.includes('linkedin')||r.includes('tiktok')) src='Redes Sociales';
+    else src='Referido';
   }
-  // Track page view regardless
-  const pageViews=JSON.parse(localStorage.getItem('js_pageviews')||'[]');
-  pageViews.push({date:new Date().toISOString(),page:location.hash||'home'});
-  if(pageViews.length>2000) pageViews.splice(0,pageViews.length-2000);
-  localStorage.setItem('js_pageviews',JSON.stringify(pageViews));
+  const device=window.innerWidth<768?'Móvil':window.innerWidth<1100?'Tablet':'Desktop';
+  sb.from('visits').insert({session_id:newId,src,device,page:'home'});
 })();
 
-// Seed demo data on first visit
-if(!localStorage.getItem('js_seeded')){
-  localStorage.setItem('js_seeded','1');
-  const now=new Date();
-  const contacts=[
-    {id:1,type:'mensaje',nombre:'María García',email:'maria@peluqueria.es',telefono:'612345678',mensaje:'Me interesa saber más sobre vuestros servicios de IA para mi salón.',date:new Date(now-86400000*1).toISOString(),status:'nuevo'},
-    {id:2,type:'mensaje',nombre:'Carlos Martínez',email:'carlos@salon.com',telefono:'634567890',mensaje:'Tengo una peluquería de 5 empleados y quiero automatizar la agenda.',date:new Date(now-86400000*2).toISOString(),status:'respondido'},
-    {id:3,type:'mensaje',nombre:'Ana López',email:'ana@hair.es',telefono:'645678901',mensaje:'Quiero saber el precio de la auditoría.',date:new Date(now-86400000*3).toISOString(),status:'nuevo'},
-    {id:4,type:'mensaje',nombre:'Pedro Sánchez',email:'pedro@barberia.es',telefono:'656789012',mensaje:'Necesito ayuda con marketing en redes sociales usando IA.',date:new Date(now-86400000*5).toISOString(),status:'respondido'},
-    {id:5,type:'mensaje',nombre:'Laura Fernández',email:'laura@peluquerias.com',telefono:'667890123',mensaje:'Me gustaría recibir más información sobre el curso online.',date:new Date(now-86400000*7).toISOString(),status:'archivado'},
-  ];
-  const d1=new Date(now);d1.setDate(d1.getDate()+2);d1.setHours(10,0);
-  const d2=new Date(now);d2.setDate(d2.getDate()+4);d2.setHours(12,0);
-  const d3=new Date(now);d3.setDate(d3.getDate()+7);d3.setHours(16,30);
-  const d4=new Date(now);d4.setDate(d4.getDate()-3);d4.setHours(11,0);
-  const audits=[
-    {id:10,type:'auditoria',nombre:'María García',email:'maria@peluqueria.es',telefono:'612345678',salon:'Peluquería María',fecha:d1.toISOString().split('T')[0],hora:'10:00',mensaje:'Quiero optimizar la gestión de citas y fidelización.',date:new Date(now-86400000).toISOString(),status:'pendiente'},
-    {id:11,type:'auditoria',nombre:'Roberto Díaz',email:'roberto@cortes.es',telefono:'678901234',salon:'Barber Studio RD',fecha:d2.toISOString().split('T')[0],hora:'12:00',mensaje:'Me interesa la automatización del marketing.',date:new Date(now-86400000*2).toISOString(),status:'confirmada'},
-    {id:12,type:'auditoria',nombre:'Sofía Ruiz',email:'sofia@belleza.com',telefono:'689012345',salon:'Salón Belleza Total',fecha:d3.toISOString().split('T')[0],hora:'16:30',mensaje:'Quiero digitalizar todo mi negocio.',date:new Date(now-86400000*3).toISOString(),status:'pendiente'},
-    {id:13,type:'auditoria',nombre:'Miguel Torres',email:'miguel@barberia.es',telefono:'690123456',salon:'La Barbería Clásica',fecha:d4.toISOString().split('T')[0],hora:'11:00',mensaje:'Revisión de procesos internos.',date:new Date(now-86400000*6).toISOString(),status:'completada'},
-  ];
-  localStorage.setItem('js_contacts',JSON.stringify(contacts));
-  localStorage.setItem('js_audits',JSON.stringify(audits));
-  // Seed 30 days of visits
-  const seedVisits=[];
-  const sources=['Orgánico','Directo','Redes Sociales','Referido'];
-  const devices=['Desktop','Móvil','Tablet'];
-  for(let i=29;i>=0;i--){
-    const dayVisits=Math.floor(Math.random()*50)+20;
-    for(let j=0;j<dayVisits;j++){
-      const d=new Date();d.setDate(d.getDate()-i);d.setHours(Math.floor(Math.random()*24),Math.floor(Math.random()*60));
-      seedVisits.push({date:d.toISOString(),session:'seed_'+i+'_'+j,src:sources[Math.floor(Math.random()*4)],device:devices[Math.floor(Math.random()*3)],page:'home'});
-    }
-  }
-  localStorage.setItem('js_visits',JSON.stringify(seedVisits));
-}
 </script>
 </body>
 </html>
